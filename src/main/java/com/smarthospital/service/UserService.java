@@ -1,9 +1,13 @@
 package com.smarthospital.service;
 
+import com.smarthospital.dto.RegisterRequestDTO;
+import com.smarthospital.dto.UserResponseDTO;
 import com.smarthospital.entity.User;
 import com.smarthospital.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.smarthospital.exception.ResourceAlreadyExistsException;
 
 @Service
 public class UserService {
@@ -11,12 +15,35 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User registerUser(User user) {
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists!");
+    public UserResponseDTO registerUser(RegisterRequestDTO request) {
+
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new ResourceAlreadyExistsException("Email already exists!");
         }
 
-        return userRepository.save(user);
+        User user = new User();
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPhone(request.getPhone());
+        user.setRole(request.getRole());
+
+        User savedUser = userRepository.save(user);
+
+        UserResponseDTO response = new UserResponseDTO();
+
+        response.setId(savedUser.getId());
+        response.setFirstName(savedUser.getFirstName());
+        response.setLastName(savedUser.getLastName());
+        response.setEmail(savedUser.getEmail());
+        response.setPhone(savedUser.getPhone());
+        response.setRole(savedUser.getRole());
+
+        return response;
     }
 }

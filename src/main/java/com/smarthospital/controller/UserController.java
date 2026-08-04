@@ -1,7 +1,9 @@
 package com.smarthospital.controller;
 
-import com.smarthospital.entity.User;
+import com.smarthospital.dto.RegisterRequestDTO;
+import com.smarthospital.dto.UserResponseDTO;
 import com.smarthospital.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +17,11 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
+    public ResponseEntity<UserResponseDTO> registerUser(
+            @Valid @RequestBody RegisterRequestDTO request) {
 
-        User savedUser = userService.registerUser(user);
+        UserResponseDTO response = userService.registerUser(request);
 
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
