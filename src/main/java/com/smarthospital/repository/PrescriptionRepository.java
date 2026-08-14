@@ -19,4 +19,5 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
 
     // Get latest prescriptions of a patient
     List<Prescription> findByPatientOrderByIdDesc(Patient patient);
+    List<Prescription> findByPatientId(Long patientId);
 }

@@ -32,9 +32,10 @@ public class Prescription {
     @JoinColumn(name = "medical_record_id", nullable = false)
     private MedicalRecord medicalRecord;
 
-    @NotBlank(message = "Medicine name is required")
-    @Column(nullable = false)
-    private String medicineName;
+    // Medicine
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medicine_id", nullable = false)
+    private Medicine medicine;
 
     @NotBlank(message = "Dosage is required")
     @Column(nullable = false)

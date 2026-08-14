@@ -16,8 +16,8 @@ public class PrescriptionRequestDTO {
     @NotNull(message = "Medical Record ID is required")
     private Long medicalRecordId;
 
-    @NotBlank(message = "Medicine name is required")
-    private String medicineName;
+    @NotNull(message = "Medicine ID is required")
+    private Long medicineId;
 
     @NotBlank(message = "Dosage is required")
     private String dosage;

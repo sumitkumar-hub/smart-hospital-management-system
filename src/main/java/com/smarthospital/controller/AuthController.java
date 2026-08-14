@@ -18,9 +18,14 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    // ==========================
+    // Login API
+    // ==========================
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponseDTO>> login(
             @Valid @RequestBody LoginRequestDTO request) {
+
+        System.out.println("LOGIN API CALLED");
 
         LoginResponseDTO response = authService.login(request);
 
@@ -32,5 +37,16 @@ public class AuthController {
         );
 
         return ResponseEntity.ok(apiResponse);
+    }
+
+    // ==========================
+    // Temporary Test API
+    // ==========================
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+
+        System.out.println("TEST API HIT");
+
+        return ResponseEntity.ok("Working");
     }
 }

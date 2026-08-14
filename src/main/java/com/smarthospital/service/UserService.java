@@ -3,11 +3,11 @@ package com.smarthospital.service;
 import com.smarthospital.dto.RegisterRequestDTO;
 import com.smarthospital.dto.UserResponseDTO;
 import com.smarthospital.entity.User;
+import com.smarthospital.exception.ResourceAlreadyExistsException;
 import com.smarthospital.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.smarthospital.exception.ResourceAlreadyExistsException;
 
 @Service
 public class UserService {
@@ -16,7 +16,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     public UserResponseDTO registerUser(RegisterRequestDTO request) {
 
@@ -36,7 +36,6 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         UserResponseDTO response = new UserResponseDTO();
-
         response.setId(savedUser.getId());
         response.setFirstName(savedUser.getFirstName());
         response.setLastName(savedUser.getLastName());

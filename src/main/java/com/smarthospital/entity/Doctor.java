@@ -3,6 +3,8 @@ package com.smarthospital.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Collection;
+
 @Entity
 @Table(name = "doctors")
 @Data
@@ -38,4 +40,14 @@ public class Doctor {
 
     @Column(nullable = false)
     private Boolean available = true;
+    @OneToMany(mappedBy = "doctor")
+    private Collection<LabOrder> labOrder;
+
+    public Collection<LabOrder> getLabOrder() {
+        return labOrder;
+    }
+
+    public void setLabOrder(Collection<LabOrder> labOrder) {
+        this.labOrder = labOrder;
+    }
 }
