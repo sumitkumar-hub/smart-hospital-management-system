@@ -7,6 +7,7 @@ import com.smarthospital.service.AppointmentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -20,169 +21,180 @@ public class AppointmentController {
     private AppointmentService appointmentService;
 
     // ==============================
-    // Book Appointment
+    // BOOK APPOINTMENT
+    // ADMIN + PATIENT + RECEPTIONIST
     // ==============================
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'PATIENT', 'RECEPTIONIST')")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> bookAppointment(
             @Valid @RequestBody AppointmentRequestDTO request) {
 
         AppointmentResponseDTO response =
                 appointmentService.bookAppointment(request);
 
-        ApiResponse<AppointmentResponseDTO> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Appointment booked successfully",
                         response,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
     // ==============================
-    // Get All Appointments
+    // GET ALL APPOINTMENTS
+    // ADMIN + DOCTOR + RECEPTIONIST
     // ==============================
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RECEPTIONIST')")
     public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAllAppointments() {
 
         List<AppointmentResponseDTO> appointments =
                 appointmentService.getAllAppointments();
 
-        ApiResponse<List<AppointmentResponseDTO>> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Appointments fetched successfully",
                         appointments,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
     // ==============================
-    // Get Appointment By Id
+    // GET APPOINTMENT BY ID
+    // ADMIN + DOCTOR + RECEPTIONIST + PATIENT
     // ==============================
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RECEPTIONIST', 'PATIENT')")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> getAppointmentById(
             @PathVariable Long id) {
 
         AppointmentResponseDTO appointment =
                 appointmentService.getAppointmentById(id);
 
-        ApiResponse<AppointmentResponseDTO> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Appointment fetched successfully",
                         appointment,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
     // ==============================
-    // Get Appointments By Patient
+    // GET APPOINTMENTS BY PATIENT
+    // ADMIN + RECEPTIONIST + PATIENT
     // ==============================
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAppointmentsByPatient(
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'PATIENT')")
+    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>>
+    getAppointmentsByPatient(
             @PathVariable Long patientId) {
 
         List<AppointmentResponseDTO> appointments =
                 appointmentService.getAppointmentsByPatient(patientId);
 
-        ApiResponse<List<AppointmentResponseDTO>> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Patient appointments fetched successfully",
                         appointments,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
     // ==============================
-    // Get Appointments By Doctor
+    // GET APPOINTMENTS BY DOCTOR
+    // ADMIN + DOCTOR + RECEPTIONIST
     // ==============================
     @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>> getAppointmentsByDoctor(
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RECEPTIONIST')")
+    public ResponseEntity<ApiResponse<List<AppointmentResponseDTO>>>
+    getAppointmentsByDoctor(
             @PathVariable Long doctorId) {
 
         List<AppointmentResponseDTO> appointments =
                 appointmentService.getAppointmentsByDoctor(doctorId);
 
-        ApiResponse<List<AppointmentResponseDTO>> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Doctor appointments fetched successfully",
                         appointments,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
     // ==============================
-    // Update Appointment Status
+    // UPDATE APPOINTMENT STATUS
+    // ADMIN + DOCTOR
     // ==============================
     @PutMapping("/{id}/status")
-    public ResponseEntity<ApiResponse<AppointmentResponseDTO>> updateAppointmentStatus(
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
+    public ResponseEntity<ApiResponse<AppointmentResponseDTO>>
+    updateAppointmentStatus(
             @PathVariable Long id,
             @RequestParam String status) {
 
         AppointmentResponseDTO response =
                 appointmentService.updateAppointmentStatus(id, status);
 
-        ApiResponse<AppointmentResponseDTO> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Appointment status updated successfully",
                         response,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
     // ==============================
-    // Cancel Appointment
+    // CANCEL APPOINTMENT
+    // ADMIN + PATIENT + RECEPTIONIST
     // ==============================
     @PutMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PATIENT', 'RECEPTIONIST')")
     public ResponseEntity<ApiResponse<AppointmentResponseDTO>> cancelAppointment(
             @PathVariable Long id) {
 
         AppointmentResponseDTO response =
                 appointmentService.cancelAppointment(id);
 
-        ApiResponse<AppointmentResponseDTO> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Appointment cancelled successfully",
                         response,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
     // ==============================
-    // Delete Appointment
+    // DELETE APPOINTMENT
+    // ADMIN ONLY
     // ==============================
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> deleteAppointment(
             @PathVariable Long id) {
 
         appointmentService.deleteAppointment(id);
 
-        ApiResponse<String> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Appointment deleted successfully",
                         "Deleted",
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 }

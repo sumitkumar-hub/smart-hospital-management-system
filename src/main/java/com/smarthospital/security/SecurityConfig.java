@@ -57,18 +57,34 @@ public class SecurityConfig {
                 // Authorization Rules
                 .authorizeHttpRequests(auth -> auth
 
-                        // Public APIs
+                        // =========================
+                        // PUBLIC AUTH APIs
+                        // =========================
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/api/users/register",
                                 "/test/**"
                         ).permitAll()
 
-                        // Everything else requires JWT
+                        // =========================
+                        // SWAGGER / OPENAPI
+                        // =========================
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml"
+                        ).permitAll()
+
+                        // =========================
+                        // EVERYTHING ELSE
+                        // =========================
                         .anyRequest().authenticated()
                 )
 
-                // Add JWT Filter
+                // =========================
+                // JWT FILTER
+                // =========================
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class

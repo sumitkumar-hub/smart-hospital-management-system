@@ -6,6 +6,7 @@ import com.smarthospital.service.PatientService;
 import com.smarthospital.util.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,12 +18,17 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    // Add Patient
+    // =========================
+    // ADD PATIENT
+    // ADMIN + RECEPTIONIST
+    // =========================
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     public ApiResponse<PatientResponseDTO> addPatient(
             @Valid @RequestBody PatientRequestDTO request) {
 
-        PatientResponseDTO response = patientService.addPatient(request);
+        PatientResponseDTO response =
+                patientService.addPatient(request);
 
         return new ApiResponse<>(
                 true,
@@ -31,11 +37,16 @@ public class PatientController {
         );
     }
 
-    // Get All Patients
+    // =========================
+    // GET ALL PATIENTS
+    // ADMIN + DOCTOR + RECEPTIONIST
+    // =========================
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RECEPTIONIST')")
     public ApiResponse<List<PatientResponseDTO>> getAllPatients() {
 
-        List<PatientResponseDTO> patients = patientService.getAllPatients();
+        List<PatientResponseDTO> patients =
+                patientService.getAllPatients();
 
         return new ApiResponse<>(
                 true,
@@ -44,12 +55,17 @@ public class PatientController {
         );
     }
 
-    // Get Patient By ID
+    // =========================
+    // GET PATIENT BY ID
+    // ADMIN + DOCTOR + PATIENT
+    // =========================
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'PATIENT')")
     public ApiResponse<PatientResponseDTO> getPatientById(
             @PathVariable Long id) {
 
-        PatientResponseDTO patient = patientService.getPatientById(id);
+        PatientResponseDTO patient =
+                patientService.getPatientById(id);
 
         return new ApiResponse<>(
                 true,
@@ -58,13 +74,18 @@ public class PatientController {
         );
     }
 
-    // Update Patient
+    // =========================
+    // UPDATE PATIENT
+    // ADMIN + RECEPTIONIST
+    // =========================
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     public ApiResponse<PatientResponseDTO> updatePatient(
             @PathVariable Long id,
             @Valid @RequestBody PatientRequestDTO request) {
 
-        PatientResponseDTO response = patientService.updatePatient(id, request);
+        PatientResponseDTO response =
+                patientService.updatePatient(id, request);
 
         return new ApiResponse<>(
                 true,

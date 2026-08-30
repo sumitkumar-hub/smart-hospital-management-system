@@ -7,6 +7,7 @@ import com.smarthospital.service.DoctorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,12 +20,17 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-    // Add Doctor
+    // =========================
+    // ADD DOCTOR
+    // ADMIN ONLY
+    // =========================
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<DoctorResponseDTO>> addDoctor(
             @Valid @RequestBody DoctorRequestDTO request) {
 
-        DoctorResponseDTO response = doctorService.addDoctor(request);
+        DoctorResponseDTO response =
+                doctorService.addDoctor(request);
 
         return ResponseEntity.ok(
                 new ApiResponse<>(
@@ -36,11 +42,16 @@ public class DoctorController {
         );
     }
 
-    // Get All Doctors
+    // =========================
+    // GET ALL DOCTORS
+    // ADMIN + DOCTOR + RECEPTIONIST + PATIENT
+    // =========================
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RECEPTIONIST', 'PATIENT')")
     public ResponseEntity<ApiResponse<List<DoctorResponseDTO>>> getAllDoctors() {
 
-        List<DoctorResponseDTO> doctors = doctorService.getAllDoctors();
+        List<DoctorResponseDTO> doctors =
+                doctorService.getAllDoctors();
 
         return ResponseEntity.ok(
                 new ApiResponse<>(
@@ -52,12 +63,17 @@ public class DoctorController {
         );
     }
 
-    // Get Doctor By ID
+    // =========================
+    // GET DOCTOR BY ID
+    // ADMIN + DOCTOR + RECEPTIONIST + PATIENT
+    // =========================
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RECEPTIONIST', 'PATIENT')")
     public ResponseEntity<ApiResponse<DoctorResponseDTO>> getDoctorById(
             @PathVariable Long id) {
 
-        DoctorResponseDTO doctor = doctorService.getDoctorById(id);
+        DoctorResponseDTO doctor =
+                doctorService.getDoctorById(id);
 
         return ResponseEntity.ok(
                 new ApiResponse<>(
@@ -69,13 +85,18 @@ public class DoctorController {
         );
     }
 
-    // Update Doctor
+    // =========================
+    // UPDATE DOCTOR
+    // ADMIN ONLY
+    // =========================
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<DoctorResponseDTO>> updateDoctor(
             @PathVariable Long id,
             @Valid @RequestBody DoctorRequestDTO request) {
 
-        DoctorResponseDTO doctor = doctorService.updateDoctor(id, request);
+        DoctorResponseDTO doctor =
+                doctorService.updateDoctor(id, request);
 
         return ResponseEntity.ok(
                 new ApiResponse<>(
@@ -87,8 +108,12 @@ public class DoctorController {
         );
     }
 
-    // Delete Doctor
+    // =========================
+    // DELETE DOCTOR
+    // ADMIN ONLY
+    // =========================
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> deleteDoctor(
             @PathVariable Long id) {
 
@@ -104,9 +129,14 @@ public class DoctorController {
         );
     }
 
-    // Search By Specialization
+    // =========================
+    // SEARCH BY SPECIALIZATION
+    // ALL STAFF + PATIENT
+    // =========================
     @GetMapping("/specialization/{specialization}")
-    public ResponseEntity<ApiResponse<List<DoctorResponseDTO>>> getDoctorsBySpecialization(
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RECEPTIONIST', 'PATIENT')")
+    public ResponseEntity<ApiResponse<List<DoctorResponseDTO>>>
+    getDoctorsBySpecialization(
             @PathVariable String specialization) {
 
         List<DoctorResponseDTO> doctors =
@@ -122,9 +152,14 @@ public class DoctorController {
         );
     }
 
-    // Get Available Doctors
+    // =========================
+    // GET AVAILABLE DOCTORS
+    // ALL STAFF + PATIENT
+    // =========================
     @GetMapping("/available")
-    public ResponseEntity<ApiResponse<List<DoctorResponseDTO>>> getAvailableDoctors() {
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RECEPTIONIST', 'PATIENT')")
+    public ResponseEntity<ApiResponse<List<DoctorResponseDTO>>>
+    getAvailableDoctors() {
 
         List<DoctorResponseDTO> doctors =
                 doctorService.getAvailableDoctors();

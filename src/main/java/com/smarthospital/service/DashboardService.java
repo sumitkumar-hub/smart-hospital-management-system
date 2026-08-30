@@ -1,5 +1,6 @@
 package com.smarthospital.service;
 
+import com.smarthospital.dto.ChartDataDTO;
 import com.smarthospital.dto.DashboardResponseDTO;
 import com.smarthospital.entity.Appointment;
 import com.smarthospital.entity.LabOrder;
@@ -167,5 +168,90 @@ public class DashboardService {
                 appointmentRepository.findByStatus(status);
 
         return appointments.size();
+    }
+
+
+    // =========================
+    // APPOINTMENT STATUS CHART
+    // =========================
+    public List<ChartDataDTO> getAppointmentStatusChart() {
+
+        return List.of(
+                new ChartDataDTO(
+                        "PENDING",
+                        getAppointmentCountByStatus("PENDING")
+                ),
+                new ChartDataDTO(
+                        "COMPLETED",
+                        getAppointmentCountByStatus("COMPLETED")
+                ),
+                new ChartDataDTO(
+                        "CANCELLED",
+                        getAppointmentCountByStatus("CANCELLED")
+                )
+        );
+    }
+
+
+    // =========================
+    // LAB ORDER STATUS CHART
+    // =========================
+    public List<ChartDataDTO> getLabOrderStatusChart() {
+
+        List<LabOrder> labOrders =
+                labOrderRepository.findAll();
+
+        long pending = labOrders.stream()
+                .filter(order ->
+                        "PENDING".equalsIgnoreCase(order.getStatus()))
+                .count();
+
+        long completed = labOrders.stream()
+                .filter(order ->
+                        "COMPLETED".equalsIgnoreCase(order.getStatus()))
+                .count();
+
+        return List.of(
+                new ChartDataDTO("PENDING", pending),
+                new ChartDataDTO("COMPLETED", completed)
+        );
+    }
+
+
+    // =========================
+    // PHARMACY STOCK CHART
+    // =========================
+    public List<ChartDataDTO> getPharmacyStockChart() {
+
+        long normalStock =
+                pharmacyInventoryRepository.findAll()
+                        .stream()
+                        .filter(inventory ->
+                                inventory.getQuantity()
+                                        > inventory.getMinimumStockLevel())
+                        .count();
+
+        long lowStock =
+                pharmacyInventoryRepository.findAll()
+                        .stream()
+                        .filter(inventory ->
+                                inventory.getQuantity()
+                                        <= inventory.getMinimumStockLevel())
+                        .count();
+
+        long expired =
+                pharmacyInventoryRepository.findAll()
+                        .stream()
+                        .filter(inventory ->
+                                inventory.getExpiryDate() != null
+                                        && inventory.getExpiryDate()
+                                        .isBefore(LocalDate.now()))
+                        .count();
+
+        return List.of(
+                new ChartDataDTO("NORMAL STOCK", normalStock),
+                new ChartDataDTO("LOW STOCK", lowStock),
+                new ChartDataDTO("EXPIRED", expired)
+        );
     }
 }

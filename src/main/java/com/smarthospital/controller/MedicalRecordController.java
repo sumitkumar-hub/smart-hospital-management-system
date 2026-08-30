@@ -7,6 +7,7 @@ import com.smarthospital.service.MedicalRecordService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,116 +20,138 @@ public class MedicalRecordController {
     @Autowired
     private MedicalRecordService medicalRecordService;
 
-    // Add Medical Record
+    // ==============================
+    // ADD MEDICAL RECORD
+    // ADMIN + DOCTOR
+    // ==============================
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public ResponseEntity<ApiResponse<MedicalRecordResponseDTO>> addMedicalRecord(
             @Valid @RequestBody MedicalRecordRequestDTO request) {
 
         MedicalRecordResponseDTO response =
                 medicalRecordService.addMedicalRecord(request);
 
-        ApiResponse<MedicalRecordResponseDTO> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Medical record added successfully",
                         response,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
-    // Get All Medical Records
+    // ==============================
+    // GET ALL MEDICAL RECORDS
+    // ADMIN + DOCTOR
+    // ==============================
     @GetMapping
-    public ResponseEntity<ApiResponse<List<MedicalRecordResponseDTO>>> getAllMedicalRecords() {
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
+    public ResponseEntity<ApiResponse<List<MedicalRecordResponseDTO>>>
+    getAllMedicalRecords() {
 
         List<MedicalRecordResponseDTO> response =
                 medicalRecordService.getAllMedicalRecords();
 
-        ApiResponse<List<MedicalRecordResponseDTO>> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Medical records fetched successfully",
                         response,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
-    // Get Medical Record By ID
+    // ==============================
+    // GET MEDICAL RECORD BY ID
+    // ADMIN + DOCTOR + PATIENT
+    // ==============================
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<MedicalRecordResponseDTO>> getMedicalRecordById(
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'PATIENT')")
+    public ResponseEntity<ApiResponse<MedicalRecordResponseDTO>>
+    getMedicalRecordById(
             @PathVariable Long id) {
 
         MedicalRecordResponseDTO response =
                 medicalRecordService.getMedicalRecordById(id);
 
-        ApiResponse<MedicalRecordResponseDTO> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Medical record fetched successfully",
                         response,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
-    // Get Medical Records By Patient
+    // ==============================
+    // GET MEDICAL RECORDS BY PATIENT
+    // ADMIN + DOCTOR + PATIENT
+    // ==============================
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<ApiResponse<List<MedicalRecordResponseDTO>>> getMedicalRecordsByPatient(
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'PATIENT')")
+    public ResponseEntity<ApiResponse<List<MedicalRecordResponseDTO>>>
+    getMedicalRecordsByPatient(
             @PathVariable Long patientId) {
 
         List<MedicalRecordResponseDTO> response =
                 medicalRecordService.getMedicalRecordsByPatient(patientId);
 
-        ApiResponse<List<MedicalRecordResponseDTO>> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Patient medical records fetched successfully",
                         response,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
-    // Update Medical Record
+    // ==============================
+    // UPDATE MEDICAL RECORD
+    // ADMIN + DOCTOR
+    // ==============================
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<MedicalRecordResponseDTO>> updateMedicalRecord(
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
+    public ResponseEntity<ApiResponse<MedicalRecordResponseDTO>>
+    updateMedicalRecord(
             @PathVariable Long id,
             @Valid @RequestBody MedicalRecordRequestDTO request) {
 
         MedicalRecordResponseDTO response =
                 medicalRecordService.updateMedicalRecord(id, request);
 
-        ApiResponse<MedicalRecordResponseDTO> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Medical record updated successfully",
                         response,
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 
-    // Delete Medical Record
+    // ==============================
+    // DELETE MEDICAL RECORD
+    // ADMIN ONLY
+    // ==============================
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> deleteMedicalRecord(
             @PathVariable Long id) {
 
         medicalRecordService.deleteMedicalRecord(id);
 
-        ApiResponse<String> apiResponse =
+        return ResponseEntity.ok(
                 new ApiResponse<>(
                         true,
                         "Medical record deleted successfully",
                         "Deleted",
                         LocalDateTime.now()
-                );
-
-        return ResponseEntity.ok(apiResponse);
+                )
+        );
     }
 }

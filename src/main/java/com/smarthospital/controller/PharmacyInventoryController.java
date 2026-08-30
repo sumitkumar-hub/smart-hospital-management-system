@@ -1,5 +1,6 @@
 package com.smarthospital.controller;
 
+import com.smarthospital.dto.ApiResponse;
 import com.smarthospital.dto.PharmacyInventoryRequestDTO;
 import com.smarthospital.dto.PharmacyInventoryResponseDTO;
 import com.smarthospital.service.PharmacyInventoryService;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -21,11 +23,19 @@ public class PharmacyInventoryController {
     // ADD INVENTORY
     // =========================
     @PostMapping
-    public ResponseEntity<PharmacyInventoryResponseDTO> addInventory(
+    public ResponseEntity<ApiResponse<PharmacyInventoryResponseDTO>> addInventory(
             @Valid @RequestBody PharmacyInventoryRequestDTO request) {
 
+        PharmacyInventoryResponseDTO response =
+                pharmacyInventoryService.addInventory(request);
+
         return ResponseEntity.ok(
-                pharmacyInventoryService.addInventory(request)
+                new ApiResponse<>(
+                        true,
+                        "Inventory added successfully",
+                        response,
+                        LocalDateTime.now()
+                )
         );
     }
 
@@ -33,11 +43,19 @@ public class PharmacyInventoryController {
     // GET ALL INVENTORY
     // =========================
     @GetMapping
-    public ResponseEntity<List<PharmacyInventoryResponseDTO>>
+    public ResponseEntity<ApiResponse<List<PharmacyInventoryResponseDTO>>>
     getAllInventory() {
 
+        List<PharmacyInventoryResponseDTO> response =
+                pharmacyInventoryService.getAllInventory();
+
         return ResponseEntity.ok(
-                pharmacyInventoryService.getAllInventory()
+                new ApiResponse<>(
+                        true,
+                        "Inventory fetched successfully",
+                        response,
+                        LocalDateTime.now()
+                )
         );
     }
 
@@ -45,11 +63,19 @@ public class PharmacyInventoryController {
     // GET INVENTORY BY ID
     // =========================
     @GetMapping("/{id}")
-    public ResponseEntity<PharmacyInventoryResponseDTO>
+    public ResponseEntity<ApiResponse<PharmacyInventoryResponseDTO>>
     getInventoryById(@PathVariable Long id) {
 
+        PharmacyInventoryResponseDTO response =
+                pharmacyInventoryService.getInventoryById(id);
+
         return ResponseEntity.ok(
-                pharmacyInventoryService.getInventoryById(id)
+                new ApiResponse<>(
+                        true,
+                        "Inventory fetched successfully",
+                        response,
+                        LocalDateTime.now()
+                )
         );
     }
 
@@ -57,11 +83,19 @@ public class PharmacyInventoryController {
     // GET INVENTORY BY MEDICINE
     // =========================
     @GetMapping("/medicine/{medicineId}")
-    public ResponseEntity<List<PharmacyInventoryResponseDTO>>
+    public ResponseEntity<ApiResponse<List<PharmacyInventoryResponseDTO>>>
     getInventoryByMedicine(@PathVariable Long medicineId) {
 
+        List<PharmacyInventoryResponseDTO> response =
+                pharmacyInventoryService.getInventoryByMedicine(medicineId);
+
         return ResponseEntity.ok(
-                pharmacyInventoryService.getInventoryByMedicine(medicineId)
+                new ApiResponse<>(
+                        true,
+                        "Medicine inventory fetched successfully",
+                        response,
+                        LocalDateTime.now()
+                )
         );
     }
 
@@ -69,13 +103,21 @@ public class PharmacyInventoryController {
     // UPDATE INVENTORY
     // =========================
     @PutMapping("/{id}")
-    public ResponseEntity<PharmacyInventoryResponseDTO>
+    public ResponseEntity<ApiResponse<PharmacyInventoryResponseDTO>>
     updateInventory(
             @PathVariable Long id,
             @Valid @RequestBody PharmacyInventoryRequestDTO request) {
 
+        PharmacyInventoryResponseDTO response =
+                pharmacyInventoryService.updateInventory(id, request);
+
         return ResponseEntity.ok(
-                pharmacyInventoryService.updateInventory(id, request)
+                new ApiResponse<>(
+                        true,
+                        "Inventory updated successfully",
+                        response,
+                        LocalDateTime.now()
+                )
         );
     }
 
@@ -83,13 +125,18 @@ public class PharmacyInventoryController {
     // DELETE INVENTORY
     // =========================
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteInventory(
-            @PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>>
+    deleteInventory(@PathVariable Long id) {
 
         pharmacyInventoryService.deleteInventory(id);
 
         return ResponseEntity.ok(
-                "Inventory deleted successfully"
+                new ApiResponse<>(
+                        true,
+                        "Inventory deleted successfully",
+                        "Deleted",
+                        LocalDateTime.now()
+                )
         );
     }
 
@@ -97,11 +144,19 @@ public class PharmacyInventoryController {
     // LOW STOCK
     // =========================
     @GetMapping("/low-stock")
-    public ResponseEntity<List<PharmacyInventoryResponseDTO>>
+    public ResponseEntity<ApiResponse<List<PharmacyInventoryResponseDTO>>>
     getLowStockInventory() {
 
+        List<PharmacyInventoryResponseDTO> response =
+                pharmacyInventoryService.getLowStockInventory();
+
         return ResponseEntity.ok(
-                pharmacyInventoryService.getLowStockInventory()
+                new ApiResponse<>(
+                        true,
+                        "Low stock inventory fetched successfully",
+                        response,
+                        LocalDateTime.now()
+                )
         );
     }
 
@@ -109,11 +164,19 @@ public class PharmacyInventoryController {
     // EXPIRED MEDICINES
     // =========================
     @GetMapping("/expired")
-    public ResponseEntity<List<PharmacyInventoryResponseDTO>>
+    public ResponseEntity<ApiResponse<List<PharmacyInventoryResponseDTO>>>
     getExpiredInventory() {
 
+        List<PharmacyInventoryResponseDTO> response =
+                pharmacyInventoryService.getExpiredInventory();
+
         return ResponseEntity.ok(
-                pharmacyInventoryService.getExpiredInventory()
+                new ApiResponse<>(
+                        true,
+                        "Expired inventory fetched successfully",
+                        response,
+                        LocalDateTime.now()
+                )
         );
     }
 }

@@ -15,6 +15,7 @@
 	<groupId>com.smarthospital</groupId>
 	<artifactId>smart-hospital-management-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<name>smart-hospital-management-system</name>
 	<description>Smart Hospital Management System</description>
 
@@ -93,6 +94,13 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Swagger / OpenAPI -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.8.9</version>
+		</dependency>
+
 		<!-- Spring Boot Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -113,6 +121,7 @@
 
 		<plugins>
 
+			<!-- Spring Boot Maven Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -124,20 +133,23 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-				</configuration>
 
+				</configuration>
 			</plugin>
 
+			<!-- Maven Compiler Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 
 				<configuration>
 					<annotationProcessorPaths>
+
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</path>
+
 					</annotationProcessorPaths>
 				</configuration>
 
