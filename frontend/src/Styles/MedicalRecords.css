@@ -1,0 +1,521 @@
+/* =========================
+   MEDICAL RECORDS PAGE
+========================= */
+
+.medical-records-page {
+    padding: 30px;
+    min-height: 100vh;
+    background: #f5f7fb;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.medical-records-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.medical-records-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #1f2937;
+}
+
+.medical-records-header p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+/* =========================
+   ADD BUTTON
+========================= */
+
+.add-record-btn {
+    border: none;
+    padding: 11px 18px;
+    border-radius: 7px;
+    background: #2563eb;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-record-btn:hover {
+    background: #1d4ed8;
+}
+
+
+/* =========================
+   ALERTS
+========================= */
+
+.alert {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.error-alert {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.success-alert {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.records-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.records-filters input,
+.records-filters select {
+    padding: 11px 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+    outline: none;
+}
+
+.records-filters input {
+    width: 320px;
+}
+
+.records-filters select {
+    width: 200px;
+}
+
+.records-filters input:focus,
+.records-filters select:focus {
+    border-color: #2563eb;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading {
+    background: white;
+    padding: 40px;
+    text-align: center;
+    border-radius: 8px;
+    color: #6b7280;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.records-table-container {
+    background: white;
+    border-radius: 8px;
+    overflow-x: auto;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.records-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 950px;
+}
+
+.records-table th {
+    background: #f9fafb;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    padding: 14px 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.records-table td {
+    padding: 14px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.records-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.no-records {
+    text-align: center !important;
+    padding: 35px !important;
+    color: #9ca3af !important;
+}
+
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.action-buttons {
+    display: flex;
+    gap: 7px;
+}
+
+.view-btn,
+.edit-btn,
+.delete-btn {
+    border: none;
+    padding: 7px 11px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.view-btn {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.view-btn:hover {
+    background: #bfdbfe;
+}
+
+.edit-btn {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.edit-btn:hover {
+    background: #fde68a;
+}
+
+.delete-btn {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.delete-btn:hover {
+    background: #fecaca;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.medical-record-modal,
+.view-record-modal {
+    width: 100%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+
+/* =========================
+   MODAL HEADER
+========================= */
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 22px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #1f2937;
+}
+
+.close-btn {
+    border: none;
+    background: transparent;
+    font-size: 28px;
+    color: #6b7280;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #111827;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.medical-record-form {
+    padding: 22px;
+}
+
+.form-group {
+    margin-bottom: 17px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #2563eb;
+}
+
+.form-group textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+
+/* =========================
+   FORM ACTIONS
+========================= */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancel-btn,
+.save-btn {
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.cancel-btn:hover {
+    background: #d1d5db;
+}
+
+.save-btn {
+    background: #2563eb;
+    color: white;
+}
+
+.save-btn:hover {
+    background: #1d4ed8;
+}
+
+.save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   VIEW DETAILS
+========================= */
+
+.record-details {
+    padding: 22px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 11px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row strong {
+    color: #374151;
+    min-width: 130px;
+}
+
+.detail-row span {
+    color: #6b7280;
+    text-align: right;
+}
+
+.detail-section {
+    margin-top: 20px;
+}
+
+.detail-section strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.detail-section p {
+    margin: 0;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 6px;
+    color: #4b5563;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+
+/* =========================
+   VIEW ACTIONS
+========================= */
+
+.view-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 18px 22px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.close-modal-btn {
+    border: none;
+    padding: 9px 17px;
+    border-radius: 6px;
+    background: #e5e7eb;
+    color: #374151;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.close-modal-btn:hover {
+    background: #d1d5db;
+}
+
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 768px) {
+
+    .medical-records-page {
+        padding: 20px;
+    }
+
+    .medical-records-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .add-record-btn {
+        width: 100%;
+    }
+
+    .records-filters {
+        flex-direction: column;
+    }
+
+    .records-filters input,
+    .records-filters select {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .medical-record-modal,
+    .view-record-modal {
+        max-height: 95vh;
+    }
+
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .detail-row span {
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .medical-records-page {
+        padding: 15px;
+    }
+
+    .medical-records-header h1 {
+        font-size: 23px;
+    }
+
+    .medical-record-form,
+    .record-details {
+        padding: 17px;
+    }
+
+    .modal-header {
+        padding: 15px 17px;
+    }
+
+    .form-actions,
+    .view-actions {
+        flex-direction: column;
+    }
+
+    .cancel-btn,
+    .save-btn,
+    .close-modal-btn {
+        width: 100%;
+    }
+}
