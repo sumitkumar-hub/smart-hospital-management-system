@@ -10,6 +10,7 @@ import MedicalRecords from "../pages/MedicalRecords";
 import Prescriptions from "../pages/Prescriptions";
 import PharmacyInventory from "../pages/PharmacyInventory";
 import Billing from "../pages/Billing";
+import LabTests from "../pages/LabTests";
 
 import AdminDashboard from "../pages/AdminDashboard";
 import DoctorDashboard from "../pages/DoctorDashboard";
@@ -133,6 +134,16 @@ function AppRoutes() {
                     <Route
                         path="billing"
                         element={<Billing />}
+                    />
+
+
+                    {/* =========================
+                        LAB TEST MANAGEMENT
+                    ========================= */}
+
+                    <Route
+                        path="lab-tests"
+                        element={<LabTests />}
                     />
 
                 </Route>

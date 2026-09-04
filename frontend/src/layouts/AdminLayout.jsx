@@ -64,6 +64,11 @@ function AdminLayout() {
                         Billing
                     </Link>
 
+                    {/* Lab Tests */}
+                    <Link to="/admin/lab-tests">
+                        Lab Tests
+                    </Link>
+
                 </nav>
 
                 {/* Logout */}
