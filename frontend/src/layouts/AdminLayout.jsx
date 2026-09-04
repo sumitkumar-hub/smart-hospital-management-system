@@ -2,7 +2,6 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import authService from "../services/authService";
 
 function AdminLayout() {
-
     const navigate = useNavigate();
 
     const user = authService.getUser();
@@ -15,51 +14,53 @@ function AdminLayout() {
     return (
         <div className="admin-layout">
 
-            {/* Sidebar */}
+            {/* =========================
+                SIDEBAR
+            ========================= */}
             <aside className="sidebar">
 
                 <h2>Smart Hospital</h2>
 
                 <nav>
 
+                    {/* Dashboard */}
                     <Link to="/admin">
                         Dashboard
                     </Link>
 
+                    {/* Patient Management */}
                     <Link to="/admin/patients">
                         Patients
                     </Link>
 
+                    {/* Doctor Management */}
                     <Link to="/admin/doctors">
                         Doctors
                     </Link>
 
+                    {/* Appointment Management */}
                     <Link to="/admin/appointments">
                         Appointments
                     </Link>
 
+                    {/* Medical Records */}
                     <Link to="/admin/medical-records">
                         Medical Records
                     </Link>
 
+                    {/* Prescriptions */}
                     <Link to="/admin/prescriptions">
                         Prescriptions
                     </Link>
 
-                    <Link to="/admin/pharmacy">
-                        Pharmacy
-                    </Link>
-
-                    <Link to="/admin/laboratory">
-                        Laboratory
-                    </Link>
-
-                    <Link to="/admin/billing">
-                        Billing
+                    {/* Pharmacy Inventory */}
+                    <Link to="/admin/pharmacy-inventory">
+                        Pharmacy Inventory
                     </Link>
 
                 </nav>
 
+                {/* Logout */}
                 <button onClick={handleLogout}>
                     Logout
                 </button>
@@ -67,7 +68,9 @@ function AdminLayout() {
             </aside>
 
 
-            {/* Main Content */}
+            {/* =========================
+                MAIN CONTENT
+            ========================= */}
             <main className="admin-main">
 
                 {/* Header */}
@@ -77,7 +80,8 @@ function AdminLayout() {
                         <h2>Admin Dashboard</h2>
                     </div>
 
-                    <div>
+                    <div className="admin-user">
+
                         <span>
                             {user?.firstName} {user?.lastName}
                         </span>
@@ -85,6 +89,7 @@ function AdminLayout() {
                         <span>
                             {" "}({user?.role})
                         </span>
+
                     </div>
 
                 </header>
