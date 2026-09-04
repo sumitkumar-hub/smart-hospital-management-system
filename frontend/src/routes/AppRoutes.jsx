@@ -11,6 +11,7 @@ import Prescriptions from "../pages/Prescriptions";
 import PharmacyInventory from "../pages/PharmacyInventory";
 import Billing from "../pages/Billing";
 import LabTests from "../pages/LabTests";
+import LabOrders from "../pages/LabOrders";
 
 import AdminDashboard from "../pages/AdminDashboard";
 import DoctorDashboard from "../pages/DoctorDashboard";
@@ -27,9 +28,7 @@ function AppRoutes() {
         <BrowserRouter>
             <Routes>
 
-                {/* =========================
-                    PUBLIC ROUTES
-                ========================= */}
+                {/* PUBLIC ROUTES */}
 
                 <Route
                     path="/login"
@@ -42,9 +41,7 @@ function AppRoutes() {
                 />
 
 
-                {/* =========================
-                    ADMIN ROUTES
-                ========================= */}
+                {/* ADMIN ROUTES */}
 
                 <Route
                     path="/admin"
@@ -57,101 +54,60 @@ function AppRoutes() {
                     }
                 >
 
-                    {/* =========================
-                        ADMIN DASHBOARD
-                    ========================= */}
-
                     <Route
                         index
                         element={<AdminDashboard />}
                     />
-
-
-                    {/* =========================
-                        PATIENT MANAGEMENT
-                    ========================= */}
 
                     <Route
                         path="patients"
                         element={<Patients />}
                     />
 
-
-                    {/* =========================
-                        DOCTOR MANAGEMENT
-                    ========================= */}
-
                     <Route
                         path="doctors"
                         element={<Doctors />}
                     />
-
-
-                    {/* =========================
-                        APPOINTMENT MANAGEMENT
-                    ========================= */}
 
                     <Route
                         path="appointments"
                         element={<Appointments />}
                     />
 
-
-                    {/* =========================
-                        MEDICAL RECORDS
-                    ========================= */}
-
                     <Route
                         path="medical-records"
                         element={<MedicalRecords />}
                     />
-
-
-                    {/* =========================
-                        PRESCRIPTION MANAGEMENT
-                    ========================= */}
 
                     <Route
                         path="prescriptions"
                         element={<Prescriptions />}
                     />
 
-
-                    {/* =========================
-                        PHARMACY INVENTORY
-                    ========================= */}
-
                     <Route
                         path="pharmacy-inventory"
                         element={<PharmacyInventory />}
                     />
-
-
-                    {/* =========================
-                        BILLING MANAGEMENT
-                    ========================= */}
 
                     <Route
                         path="billing"
                         element={<Billing />}
                     />
 
-
-                    {/* =========================
-                        LAB TEST MANAGEMENT
-                    ========================= */}
-
                     <Route
                         path="lab-tests"
                         element={<LabTests />}
                     />
 
+                    <Route
+                        path="lab-orders"
+                        element={<LabOrders />}
+                    />
+
                 </Route>
 
 
-                {/* =========================
-                    DOCTOR DASHBOARD
-                ========================= */}
+                {/* ROLE DASHBOARDS */}
 
                 <Route
                     path="/doctor"
@@ -164,11 +120,6 @@ function AppRoutes() {
                     }
                 />
 
-
-                {/* =========================
-                    PATIENT DASHBOARD
-                ========================= */}
-
                 <Route
                     path="/patient"
                     element={
@@ -179,11 +130,6 @@ function AppRoutes() {
                         </ProtectedRoute>
                     }
                 />
-
-
-                {/* =========================
-                    RECEPTIONIST DASHBOARD
-                ========================= */}
 
                 <Route
                     path="/receptionist"
@@ -196,11 +142,6 @@ function AppRoutes() {
                     }
                 />
 
-
-                {/* =========================
-                    PHARMACIST DASHBOARD
-                ========================= */}
-
                 <Route
                     path="/pharmacist"
                     element={
@@ -211,11 +152,6 @@ function AppRoutes() {
                         </ProtectedRoute>
                     }
                 />
-
-
-                {/* =========================
-                    LABORATORY DASHBOARD
-                ========================= */}
 
                 <Route
                     path="/laboratory"
@@ -229,9 +165,7 @@ function AppRoutes() {
                 />
 
 
-                {/* =========================
-                    DEFAULT ROUTES
-                ========================= */}
+                {/* DEFAULT ROUTES */}
 
                 <Route
                     path="/"
