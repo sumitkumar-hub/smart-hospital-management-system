@@ -17,6 +17,7 @@ function AdminLayout() {
             {/* =========================
                 SIDEBAR
             ========================= */}
+
             <aside className="sidebar">
 
                 <h2>Smart Hospital</h2>
@@ -28,17 +29,17 @@ function AdminLayout() {
                         Dashboard
                     </Link>
 
-                    {/* Patient Management */}
+                    {/* Patients */}
                     <Link to="/admin/patients">
                         Patients
                     </Link>
 
-                    {/* Doctor Management */}
+                    {/* Doctors */}
                     <Link to="/admin/doctors">
                         Doctors
                     </Link>
 
-                    {/* Appointment Management */}
+                    {/* Appointments */}
                     <Link to="/admin/appointments">
                         Appointments
                     </Link>
@@ -58,6 +59,11 @@ function AdminLayout() {
                         Pharmacy Inventory
                     </Link>
 
+                    {/* Billing */}
+                    <Link to="/admin/billing">
+                        Billing
+                    </Link>
+
                 </nav>
 
                 {/* Logout */}
@@ -71,6 +77,7 @@ function AdminLayout() {
             {/* =========================
                 MAIN CONTENT
             ========================= */}
+
             <main className="admin-main">
 
                 {/* Header */}
@@ -97,7 +104,9 @@ function AdminLayout() {
 
                 {/* Page Content */}
                 <section className="admin-content">
+
                     <Outlet />
+
                 </section>
 
             </main>

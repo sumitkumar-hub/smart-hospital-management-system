@@ -2,12 +2,15 @@ import AdminLayout from "../layouts/AdminLayout";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "../pages/Login";
+
 import Patients from "../pages/Patients";
 import Doctors from "../pages/Doctors";
 import Appointments from "../pages/Appointments";
 import MedicalRecords from "../pages/MedicalRecords";
 import Prescriptions from "../pages/Prescriptions";
 import PharmacyInventory from "../pages/PharmacyInventory";
+import Billing from "../pages/Billing";
+
 import AdminDashboard from "../pages/AdminDashboard";
 import DoctorDashboard from "../pages/DoctorDashboard";
 import PatientDashboard from "../pages/PatientDashboard";
@@ -53,41 +56,83 @@ function AppRoutes() {
                     }
                 >
 
-                    {/* Dashboard */}
+                    {/* =========================
+                        ADMIN DASHBOARD
+                    ========================= */}
+
                     <Route
                         index
                         element={<AdminDashboard />}
                     />
 
-                    {/* Patients */}
+
+                    {/* =========================
+                        PATIENT MANAGEMENT
+                    ========================= */}
+
                     <Route
                         path="patients"
                         element={<Patients />}
                     />
-                    {/* Pharmacy Inventory */}
-                    <Route path="pharmacy-inventory" element={<PharmacyInventory />} />
-                    {/* Doctors */}
+
+
+                    {/* =========================
+                        DOCTOR MANAGEMENT
+                    ========================= */}
+
                     <Route
                         path="doctors"
                         element={<Doctors />}
                     />
 
-                    {/* Appointments */}
+
+                    {/* =========================
+                        APPOINTMENT MANAGEMENT
+                    ========================= */}
+
                     <Route
                         path="appointments"
                         element={<Appointments />}
                     />
 
-                    {/* Medical Records */}
+
+                    {/* =========================
+                        MEDICAL RECORDS
+                    ========================= */}
+
                     <Route
                         path="medical-records"
                         element={<MedicalRecords />}
                     />
 
-                    {/* Prescriptions */}
+
+                    {/* =========================
+                        PRESCRIPTION MANAGEMENT
+                    ========================= */}
+
                     <Route
                         path="prescriptions"
                         element={<Prescriptions />}
+                    />
+
+
+                    {/* =========================
+                        PHARMACY INVENTORY
+                    ========================= */}
+
+                    <Route
+                        path="pharmacy-inventory"
+                        element={<PharmacyInventory />}
+                    />
+
+
+                    {/* =========================
+                        BILLING MANAGEMENT
+                    ========================= */}
+
+                    <Route
+                        path="billing"
+                        element={<Billing />}
                     />
 
                 </Route>
