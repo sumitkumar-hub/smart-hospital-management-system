@@ -3,7 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "../pages/Login";
 import Patients from "../pages/Patients";
-
+import Doctors from "../pages/Doctors";
+import Appointments from "../pages/Appointments";
+import MedicalRecords from "../pages/MedicalRecords";
+import Prescriptions from "../pages/Prescriptions";
+import PharmacyInventory from "../pages/PharmacyInventory";
 import AdminDashboard from "../pages/AdminDashboard";
 import DoctorDashboard from "../pages/DoctorDashboard";
 import PatientDashboard from "../pages/PatientDashboard";
@@ -49,16 +53,41 @@ function AppRoutes() {
                     }
                 >
 
-                    {/* Admin Dashboard */}
+                    {/* Dashboard */}
                     <Route
                         index
                         element={<AdminDashboard />}
                     />
 
-                    {/* Patient Management */}
+                    {/* Patients */}
                     <Route
                         path="patients"
                         element={<Patients />}
+                    />
+                    {/* Pharmacy Inventory */}
+                    <Route path="pharmacy-inventory" element={<PharmacyInventory />} />
+                    {/* Doctors */}
+                    <Route
+                        path="doctors"
+                        element={<Doctors />}
+                    />
+
+                    {/* Appointments */}
+                    <Route
+                        path="appointments"
+                        element={<Appointments />}
+                    />
+
+                    {/* Medical Records */}
+                    <Route
+                        path="medical-records"
+                        element={<MedicalRecords />}
+                    />
+
+                    {/* Prescriptions */}
+                    <Route
+                        path="prescriptions"
+                        element={<Prescriptions />}
                     />
 
                 </Route>
@@ -145,7 +174,7 @@ function AppRoutes() {
 
 
                 {/* =========================
-                    DEFAULT ROUTE
+                    DEFAULT ROUTES
                 ========================= */}
 
                 <Route
