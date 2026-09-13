@@ -2,6 +2,7 @@ import AdminLayout from "../layouts/AdminLayout";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 import Patients from "../pages/Patients";
 import Doctors from "../pages/Doctors";
@@ -12,10 +13,20 @@ import PharmacyInventory from "../pages/PharmacyInventory";
 import Billing from "../pages/Billing";
 import LabTests from "../pages/LabTests";
 import LabOrders from "../pages/LabOrders";
+import LabReports from "../pages/LabReports";
 
 import AdminDashboard from "../pages/AdminDashboard";
+
 import DoctorDashboard from "../pages/DoctorDashboard";
+import DoctorAppointments from "../pages/DoctorAppointments";
+import DoctorPatients from "../pages/DoctorPatients";
+
 import PatientDashboard from "../pages/PatientDashboard";
+import PatientAppointments from "../pages/PatientAppointments";
+import PatientMedicalRecords from "../pages/PatientMedicalRecords";
+import PatientPrescriptions from "../pages/PatientPrescriptions";
+import PatientLabReports from "../pages/PatientLabReports";
+
 import ReceptionistDashboard from "../pages/ReceptionistDashboard";
 import PharmacistDashboard from "../pages/PharmacistDashboard";
 import LaboratoryDashboard from "../pages/LaboratoryDashboard";
@@ -28,7 +39,7 @@ function AppRoutes() {
         <BrowserRouter>
             <Routes>
 
-                {/* PUBLIC ROUTES */}
+                {/* ================= PUBLIC ROUTES ================= */}
 
                 <Route
                     path="/login"
@@ -37,11 +48,11 @@ function AppRoutes() {
 
                 <Route
                     path="/register"
-                    element={<h1>Register Page</h1>}
+                    element={<Register />}
                 />
 
 
-                {/* ADMIN ROUTES */}
+                {/* ================= ADMIN ROUTES ================= */}
 
                 <Route
                     path="/admin"
@@ -104,10 +115,15 @@ function AppRoutes() {
                         element={<LabOrders />}
                     />
 
+                    <Route
+                        path="lab-reports"
+                        element={<LabReports />}
+                    />
+
                 </Route>
 
 
-                {/* ROLE DASHBOARDS */}
+                {/* ================= DOCTOR ROUTES ================= */}
 
                 <Route
                     path="/doctor"
@@ -121,6 +137,20 @@ function AppRoutes() {
                 />
 
                 <Route
+                    path="/doctor/appointments"
+                    element={
+                        <ProtectedRoute>
+                            <RoleBasedRoute allowedRoles={["DOCTOR"]}>
+                                <DoctorAppointments />
+                            </RoleBasedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= PATIENT ROUTES ================= */}
+
+                <Route
                     path="/patient"
                     element={
                         <ProtectedRoute>
@@ -130,6 +160,64 @@ function AppRoutes() {
                         </ProtectedRoute>
                     }
                 />
+
+                <Route
+                    path="/patient/appointments"
+                    element={
+                        <ProtectedRoute>
+                            <RoleBasedRoute allowedRoles={["PATIENT"]}>
+                                <PatientAppointments />
+                            </RoleBasedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/patient/medical-records"
+                    element={
+                        <ProtectedRoute>
+                            <RoleBasedRoute allowedRoles={["PATIENT"]}>
+                                <PatientMedicalRecords />
+                            </RoleBasedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/patient/prescriptions"
+                    element={
+                        <ProtectedRoute>
+                            <RoleBasedRoute allowedRoles={["PATIENT"]}>
+                                <PatientPrescriptions />
+                            </RoleBasedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/patient/lab-reports"
+                    element={
+                        <ProtectedRoute>
+                            <RoleBasedRoute allowedRoles={["PATIENT"]}>
+                                <PatientLabReports />
+                            </RoleBasedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+                {/* ================= doctor patients ================= */}
+                <Route
+                    path="/doctor/patients"
+                    element={
+                        <ProtectedRoute>
+                            <RoleBasedRoute allowedRoles={["DOCTOR"]}>
+                                <DoctorPatients />
+                            </RoleBasedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= RECEPTIONIST DASHBOARD ================= */}
 
                 <Route
                     path="/receptionist"
@@ -142,6 +230,9 @@ function AppRoutes() {
                     }
                 />
 
+
+                {/* ================= PHARMACIST DASHBOARD ================= */}
+
                 <Route
                     path="/pharmacist"
                     element={
@@ -152,6 +243,9 @@ function AppRoutes() {
                         </ProtectedRoute>
                     }
                 />
+
+
+                {/* ================= LABORATORY DASHBOARD ================= */}
 
                 <Route
                     path="/laboratory"
@@ -165,7 +259,7 @@ function AppRoutes() {
                 />
 
 
-                {/* DEFAULT ROUTES */}
+                {/* ================= DEFAULT ROUTES ================= */}
 
                 <Route
                     path="/"
