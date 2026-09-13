@@ -3,23 +3,39 @@ package com.smarthospital.dto;
 public class LoginResponseDTO {
 
     private Long id;
+
+    private Long patientId;
+
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     private String role;
 
-    // JWT Fields
     private String token;
+
     private String type;
+
 
     public LoginResponseDTO() {
     }
 
-    public LoginResponseDTO(Long id, String firstName, String lastName,
-                            String email, String role,
-                            String token, String type) {
+
+    public LoginResponseDTO(
+            Long id,
+            Long patientId,
+            String firstName,
+            String lastName,
+            String email,
+            String role,
+            String token,
+            String type
+    ) {
 
         this.id = id;
+        this.patientId = patientId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -27,6 +43,7 @@ public class LoginResponseDTO {
         this.token = token;
         this.type = type;
     }
+
 
     public Long getId() {
         return id;
@@ -36,6 +53,16 @@ public class LoginResponseDTO {
         this.id = id;
     }
 
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
+    }
+
+
     public String getFirstName() {
         return firstName;
     }
@@ -43,6 +70,7 @@ public class LoginResponseDTO {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
 
     public String getLastName() {
         return lastName;
@@ -52,6 +80,7 @@ public class LoginResponseDTO {
         this.lastName = lastName;
     }
 
+
     public String getEmail() {
         return email;
     }
@@ -59,6 +88,7 @@ public class LoginResponseDTO {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
     public String getRole() {
         return role;
@@ -68,6 +98,7 @@ public class LoginResponseDTO {
         this.role = role;
     }
 
+
     public String getToken() {
         return token;
     }
@@ -75,6 +106,7 @@ public class LoginResponseDTO {
     public void setToken(String token) {
         this.token = token;
     }
+
 
     public String getType() {
         return type;

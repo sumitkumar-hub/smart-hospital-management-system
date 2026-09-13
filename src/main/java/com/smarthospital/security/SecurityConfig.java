@@ -31,31 +31,39 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+
     // =========================
     // Password Encoder
     // =========================
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+
     // =========================
     // Authentication Manager
     // =========================
+
     @Bean
     public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration) throws Exception {
+            AuthenticationConfiguration configuration
+    ) throws Exception {
 
         return configuration.getAuthenticationManager();
     }
 
+
     // =========================
     // CORS Configuration
     // =========================
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration configuration =
+                new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
@@ -71,7 +79,9 @@ public class SecurityConfig {
                 "OPTIONS"
         ));
 
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(
+                List.of("*")
+        );
 
         configuration.setExposedHeaders(List.of(
                 "Authorization"
@@ -79,93 +89,106 @@ public class SecurityConfig {
 
         configuration.setAllowCredentials(true);
 
+
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
 
         return source;
     }
 
+
     // =========================
     // Security Filter Chain
     // =========================
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http
+    ) throws Exception {
 
         http
 
-                // =========================
                 // CORS
-                // =========================
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors ->
+                        cors.configurationSource(
+                                corsConfigurationSource()
+                        )
+                )
 
-                // =========================
                 // CSRF
-                // =========================
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf ->
+                        csrf.disable()
+                )
 
-                // =========================
                 // Exception Handling
-                // =========================
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint(
                                 jwtAuthenticationEntryPoint
                         )
                 )
 
-                // =========================
                 // Stateless Session
-                // =========================
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
                 )
 
-                // =========================
-                // Authorization Rules
-                // =========================
+                // Authorization
                 .authorizeHttpRequests(auth -> auth
 
-                        // Allow CORS preflight requests
-                        .requestMatchers(HttpMethod.OPTIONS, "/**")
+                        // CORS preflight
+                        .requestMatchers(
+                                HttpMethod.OPTIONS,
+                                "/**"
+                        )
                         .permitAll()
+
 
                         // =========================
                         // PUBLIC AUTH APIs
                         // =========================
+
                         .requestMatchers(
                                 "/api/auth/**",
-                                "/api/users/register",
                                 "/test/**"
-                        ).permitAll()
+                        )
+                        .permitAll()
+
 
                         // =========================
-                        // SWAGGER / OPENAPI
+                        // SWAGGER
                         // =========================
+
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
                                 "/v3/api-docs.yaml"
-                        ).permitAll()
+                        )
+                        .permitAll()
+
 
                         // =========================
                         // EVERYTHING ELSE
                         // =========================
+
                         .anyRequest()
                         .authenticated()
                 )
 
-                // =========================
-                // JWT FILTER
-                // =========================
+
+                // JWT Filter
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
+
 
         return http.build();
     }

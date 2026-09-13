@@ -15,6 +15,15 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @OneToOne
+    @JoinColumn(
+            name = "user_id",
+            unique = true
+    )
+    private User user;
+
+
     @NotBlank(message = "First name is required")
     @Column(nullable = false)
     private String firstName;
@@ -53,8 +62,10 @@ public class Patient {
     @Column(nullable = false)
     private Boolean active = true;
 
+
     public Patient() {
     }
+
 
     public Long getId() {
         return id;
@@ -64,6 +75,16 @@ public class Patient {
         this.id = id;
     }
 
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
     public String getFirstName() {
         return firstName;
     }
@@ -71,6 +92,7 @@ public class Patient {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
 
     public String getLastName() {
         return lastName;
@@ -80,6 +102,7 @@ public class Patient {
         this.lastName = lastName;
     }
 
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
@@ -87,6 +110,7 @@ public class Patient {
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
+
 
     public String getGender() {
         return gender;
@@ -96,6 +120,7 @@ public class Patient {
         this.gender = gender;
     }
 
+
     public String getPhone() {
         return phone;
     }
@@ -103,6 +128,7 @@ public class Patient {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
 
     public String getEmail() {
         return email;
@@ -112,6 +138,7 @@ public class Patient {
         this.email = email;
     }
 
+
     public String getAddress() {
         return address;
     }
@@ -119,6 +146,7 @@ public class Patient {
     public void setAddress(String address) {
         this.address = address;
     }
+
 
     public String getBloodGroup() {
         return bloodGroup;
@@ -128,6 +156,7 @@ public class Patient {
         this.bloodGroup = bloodGroup;
     }
 
+
     public String getEmergencyContactName() {
         return emergencyContactName;
     }
@@ -136,6 +165,7 @@ public class Patient {
         this.emergencyContactName = emergencyContactName;
     }
 
+
     public String getEmergencyContactPhone() {
         return emergencyContactPhone;
     }
@@ -143,6 +173,7 @@ public class Patient {
     public void setEmergencyContactPhone(String emergencyContactPhone) {
         this.emergencyContactPhone = emergencyContactPhone;
     }
+
 
     public Boolean getActive() {
         return active;
