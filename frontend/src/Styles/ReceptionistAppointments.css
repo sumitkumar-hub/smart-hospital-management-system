@@ -1,0 +1,360 @@
+.receptionist-appointments-page {
+    min-height: 100vh;
+    padding: 30px;
+    background: #f5f7fb;
+}
+
+.appointments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.appointments-header h1 {
+    margin: 0;
+    font-size: 30px;
+    color: #1f2937;
+}
+
+.appointments-header p {
+    margin-top: 7px;
+    color: #6b7280;
+}
+
+.back-btn {
+    border: none;
+    background: #ffffff;
+    color: #374151;
+    padding: 11px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.back-btn:hover {
+    background: #eef2f7;
+}
+
+.appointments-error {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.appointment-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.summary-card span {
+    display: block;
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.summary-card strong {
+    font-size: 28px;
+    color: #111827;
+}
+
+.appointment-form-section,
+.appointments-table-section {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.section-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.section-title-row h2 {
+    margin: 0;
+    color: #1f2937;
+}
+
+.section-title-row p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.add-appointment-btn {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.add-appointment-btn:hover {
+    background: #1d4ed8;
+}
+
+.appointment-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group-full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 14px;
+    outline: none;
+    background: #ffffff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #2563eb;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 12px;
+}
+
+.save-appointment-btn,
+.cancel-form-btn {
+    border: none;
+    padding: 11px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.save-appointment-btn {
+    background: #16a34a;
+    color: white;
+}
+
+.save-appointment-btn:hover {
+    background: #15803d;
+}
+
+.cancel-form-btn {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.cancel-form-btn:hover {
+    background: #d1d5db;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1100px;
+}
+
+.appointments-table th,
+.appointments-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    font-size: 14px;
+}
+
+.appointments-table th {
+    background: #f9fafb;
+    color: #374151;
+    font-weight: 700;
+}
+
+.appointments-table td {
+    color: #4b5563;
+}
+
+.appointments-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.appointment-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-scheduled {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-completed {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-cancelled {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-default {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.complete-btn,
+.cancel-appointment-btn {
+    border: none;
+    padding: 7px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.complete-btn {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.complete-btn:hover {
+    background: #bbf7d0;
+}
+
+.cancel-appointment-btn {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.cancel-appointment-btn:hover {
+    background: #fecaca;
+}
+
+.action-done {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.empty-appointments {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.empty-appointments h3 {
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.empty-appointments p {
+    color: #6b7280;
+}
+
+.appointments-loading {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6b7280;
+    font-size: 18px;
+}
+
+@media (max-width: 900px) {
+    .appointment-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .appointment-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group-full,
+    .form-actions {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .receptionist-appointments-page {
+        padding: 18px;
+    }
+
+    .appointments-header {
+        align-items: flex-start;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .appointments-header h1 {
+        font-size: 24px;
+    }
+
+    .appointment-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .add-appointment-btn {
+        width: 100%;
+    }
+}
