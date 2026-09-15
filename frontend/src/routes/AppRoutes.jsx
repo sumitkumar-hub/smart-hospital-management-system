@@ -13,6 +13,7 @@ import MedicalRecords from "../pages/MedicalRecords";
 import Prescriptions from "../pages/Prescriptions";
 import PharmacyInventory from "../pages/PharmacyInventory";
 import Billing from "../pages/Billing";
+
 import LabTests from "../pages/LabTests";
 import LabOrders from "../pages/LabOrders";
 import LabReports from "../pages/LabReports";
@@ -35,6 +36,7 @@ import PatientLabReports from "../pages/PatientLabReports";
 // ================= RECEPTIONIST =================
 import ReceptionistDashboard from "../pages/ReceptionistDashboard";
 import ReceptionistPatients from "../pages/ReceptionistPatients";
+import ReceptionistBilling from "../pages/ReceptionistBilling";
 
 // ================= OTHER ROLES =================
 import PharmacistDashboard from "../pages/PharmacistDashboard";
@@ -278,6 +280,16 @@ function AppRoutes() {
                         <ProtectedRoute>
                             <RoleBasedRoute allowedRoles={["RECEPTIONIST"]}>
                                 <ReceptionistPatients />
+                            </RoleBasedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/receptionist/billing"
+                    element={
+                        <ProtectedRoute>
+                            <RoleBasedRoute allowedRoles={["RECEPTIONIST"]}>
+                                <ReceptionistBilling />
                             </RoleBasedRoute>
                         </ProtectedRoute>
                     }
