@@ -48,4 +48,18 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+    // Inactive Patient Account Exception
+    @ExceptionHandler(InactiveAccountException.class)
+    public ResponseEntity<ErrorResponse> handleInactiveAccountException(
+            InactiveAccountException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                ex.getMessage()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
 }

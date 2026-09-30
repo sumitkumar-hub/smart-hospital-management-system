@@ -28,6 +28,9 @@ public class BillingRequestDTO {
     @NotBlank(message = "Payment status is required")
     private String paymentStatus;
 
+    // Required only when paymentStatus = PARTIAL
+    private BigDecimal amountPaid;
+
     @NotBlank(message = "Payment method is required")
     private String paymentMethod;
 

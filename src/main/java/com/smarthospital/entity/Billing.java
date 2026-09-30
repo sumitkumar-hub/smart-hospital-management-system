@@ -45,6 +45,14 @@ public class Billing {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
+    @NotNull
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal amountPaid;
+
+    @NotNull
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal remainingAmount;
+
     @Column(nullable = false)
     private String paymentStatus; // PAID / UNPAID / PARTIAL
 

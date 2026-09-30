@@ -23,7 +23,11 @@ public class BillingService {
     @Autowired
     private PatientRepository patientRepository;
 
-    // Create Bill
+
+    // =========================================================
+    // CREATE BILL
+    // =========================================================
+
     public BillingResponseDTO createBill(BillingRequestDTO request) {
 
         Patient patient = patientRepository.findById(request.getPatientId())
@@ -33,20 +37,40 @@ public class BillingService {
         Billing billing = new Billing();
 
         billing.setPatient(patient);
-        billing.setConsultationFee(request.getConsultationFee());
-        billing.setMedicineCharges(request.getMedicineCharges());
-        billing.setLabCharges(request.getLabCharges());
-        billing.setOtherCharges(request.getOtherCharges());
 
-        // Auto Calculate Total
-        BigDecimal total = request.getConsultationFee()
-                .add(request.getMedicineCharges())
-                .add(request.getLabCharges())
-                .add(request.getOtherCharges());
+        billing.setConsultationFee(
+                safeAmount(request.getConsultationFee())
+        );
+
+        billing.setMedicineCharges(
+                safeAmount(request.getMedicineCharges())
+        );
+
+        billing.setLabCharges(
+                safeAmount(request.getLabCharges())
+        );
+
+        billing.setOtherCharges(
+                safeAmount(request.getOtherCharges())
+        );
+
+        // Calculate total
+        BigDecimal total = calculateTotal(
+                request.getConsultationFee(),
+                request.getMedicineCharges(),
+                request.getLabCharges(),
+                request.getOtherCharges()
+        );
 
         billing.setTotalAmount(total);
 
-        billing.setPaymentStatus(request.getPaymentStatus());
+        // Calculate payment
+        applyPaymentDetails(
+                billing,
+                request.getPaymentStatus(),
+                request.getAmountPaid()
+        );
+
         billing.setPaymentMethod(request.getPaymentMethod());
         billing.setBillDate(request.getBillDate());
 
@@ -55,7 +79,11 @@ public class BillingService {
         return convertToDTO(savedBill);
     }
 
-    // Get All Bills
+
+    // =========================================================
+    // GET ALL BILLS
+    // =========================================================
+
     public List<BillingResponseDTO> getAllBills() {
 
         return billingRepository.findAll()
@@ -64,7 +92,11 @@ public class BillingService {
                 .collect(Collectors.toList());
     }
 
-    // Get Bill By ID
+
+    // =========================================================
+    // GET BILL BY ID
+    // =========================================================
+
     public BillingResponseDTO getBillById(Long id) {
 
         Billing bill = billingRepository.findById(id)
@@ -74,7 +106,11 @@ public class BillingService {
         return convertToDTO(bill);
     }
 
-    // Get Bills By Patient
+
+    // =========================================================
+    // GET BILLS BY PATIENT
+    // =========================================================
+
     public List<BillingResponseDTO> getBillsByPatient(Long patientId) {
 
         Patient patient = patientRepository.findById(patientId)
@@ -87,8 +123,15 @@ public class BillingService {
                 .collect(Collectors.toList());
     }
 
-    // Update Bill
-    public BillingResponseDTO updateBill(Long id, BillingRequestDTO request) {
+
+    // =========================================================
+    // UPDATE BILL
+    // =========================================================
+
+    public BillingResponseDTO updateBill(
+            Long id,
+            BillingRequestDTO request
+    ) {
 
         Billing bill = billingRepository.findById(id)
                 .orElseThrow(() ->
@@ -99,19 +142,40 @@ public class BillingService {
                         new ResourceNotFoundException("Patient not found"));
 
         bill.setPatient(patient);
-        bill.setConsultationFee(request.getConsultationFee());
-        bill.setMedicineCharges(request.getMedicineCharges());
-        bill.setLabCharges(request.getLabCharges());
-        bill.setOtherCharges(request.getOtherCharges());
 
-        BigDecimal total = request.getConsultationFee()
-                .add(request.getMedicineCharges())
-                .add(request.getLabCharges())
-                .add(request.getOtherCharges());
+        bill.setConsultationFee(
+                safeAmount(request.getConsultationFee())
+        );
+
+        bill.setMedicineCharges(
+                safeAmount(request.getMedicineCharges())
+        );
+
+        bill.setLabCharges(
+                safeAmount(request.getLabCharges())
+        );
+
+        bill.setOtherCharges(
+                safeAmount(request.getOtherCharges())
+        );
+
+        // Recalculate total
+        BigDecimal total = calculateTotal(
+                request.getConsultationFee(),
+                request.getMedicineCharges(),
+                request.getLabCharges(),
+                request.getOtherCharges()
+        );
 
         bill.setTotalAmount(total);
 
-        bill.setPaymentStatus(request.getPaymentStatus());
+        // Recalculate payment
+        applyPaymentDetails(
+                bill,
+                request.getPaymentStatus(),
+                request.getAmountPaid()
+        );
+
         bill.setPaymentMethod(request.getPaymentMethod());
         bill.setBillDate(request.getBillDate());
 
@@ -120,21 +184,37 @@ public class BillingService {
         return convertToDTO(updatedBill);
     }
 
-    // Update Payment Status
-    public BillingResponseDTO updatePaymentStatus(Long id, String paymentStatus) {
+
+    // =========================================================
+    // UPDATE PAYMENT STATUS
+    // =========================================================
+
+    public BillingResponseDTO updatePaymentStatus(
+            Long id,
+            String paymentStatus,
+            BigDecimal amountPaid
+    ) {
 
         Billing bill = billingRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Bill not found"));
 
-        bill.setPaymentStatus(paymentStatus);
+        applyPaymentDetails(
+                bill,
+                paymentStatus,
+                amountPaid
+        );
 
         Billing updatedBill = billingRepository.save(bill);
 
         return convertToDTO(updatedBill);
     }
 
-    // Delete Bill
+
+    // =========================================================
+    // DELETE BILL
+    // =========================================================
+
     public void deleteBill(Long id) {
 
         Billing bill = billingRepository.findById(id)
@@ -144,28 +224,215 @@ public class BillingService {
         billingRepository.delete(bill);
     }
 
-    // Convert Entity to DTO
+
+    // =========================================================
+    // PAYMENT CALCULATION
+    // =========================================================
+
+    private void applyPaymentDetails(
+            Billing billing,
+            String paymentStatus,
+            BigDecimal requestedAmountPaid
+    ) {
+
+        if (paymentStatus == null ||
+                paymentStatus.trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "Payment status is required"
+            );
+        }
+
+        String status =
+                paymentStatus.trim().toUpperCase();
+
+        BigDecimal total =
+                safeAmount(billing.getTotalAmount());
+
+        BigDecimal amountPaid;
+        BigDecimal remainingAmount;
+
+
+        // -----------------------------------------------------
+        // UNPAID
+        // -----------------------------------------------------
+
+        if ("UNPAID".equals(status)) {
+
+            amountPaid = BigDecimal.ZERO;
+
+            remainingAmount = total;
+        }
+
+
+        // -----------------------------------------------------
+        // PAID
+        // -----------------------------------------------------
+
+        else if ("PAID".equals(status)) {
+
+            amountPaid = total;
+
+            remainingAmount = BigDecimal.ZERO;
+        }
+
+
+        // -----------------------------------------------------
+        // PARTIAL
+        // -----------------------------------------------------
+
+        else if ("PARTIAL".equals(status)) {
+
+            if (requestedAmountPaid == null) {
+
+                throw new IllegalArgumentException(
+                        "Amount paid is required for partial payment"
+                );
+            }
+
+            amountPaid =
+                    requestedAmountPaid
+                            .setScale(2, BigDecimal.ROUND_HALF_UP);
+
+            if (amountPaid.compareTo(BigDecimal.ZERO) <= 0) {
+
+                throw new IllegalArgumentException(
+                        "Partial payment must be greater than 0"
+                );
+            }
+
+            if (amountPaid.compareTo(total) >= 0) {
+
+                throw new IllegalArgumentException(
+                        "Partial payment must be less than total amount"
+                );
+            }
+
+            remainingAmount =
+                    total.subtract(amountPaid)
+                            .setScale(
+                                    2,
+                                    BigDecimal.ROUND_HALF_UP
+                            );
+        }
+
+
+        // -----------------------------------------------------
+        // INVALID STATUS
+        // -----------------------------------------------------
+
+        else {
+
+            throw new IllegalArgumentException(
+                    "Invalid payment status. Use PAID, UNPAID or PARTIAL"
+            );
+        }
+
+        billing.setPaymentStatus(status);
+        billing.setAmountPaid(amountPaid);
+        billing.setRemainingAmount(remainingAmount);
+    }
+
+
+    // =========================================================
+    // CALCULATE TOTAL
+    // =========================================================
+
+    private BigDecimal calculateTotal(
+            BigDecimal consultationFee,
+            BigDecimal medicineCharges,
+            BigDecimal labCharges,
+            BigDecimal otherCharges
+    ) {
+
+        return safeAmount(consultationFee)
+                .add(safeAmount(medicineCharges))
+                .add(safeAmount(labCharges))
+                .add(safeAmount(otherCharges))
+                .setScale(
+                        2,
+                        BigDecimal.ROUND_HALF_UP
+                );
+    }
+
+
+    // =========================================================
+    // SAFE AMOUNT
+    // =========================================================
+
+    private BigDecimal safeAmount(BigDecimal amount) {
+
+        if (amount == null) {
+            return BigDecimal.ZERO;
+        }
+
+        return amount.setScale(
+                2,
+                BigDecimal.ROUND_HALF_UP
+        );
+    }
+
+
+    // =========================================================
+    // ENTITY → DTO
+    // =========================================================
+
     private BillingResponseDTO convertToDTO(Billing bill) {
 
-        BillingResponseDTO response = new BillingResponseDTO();
+        BillingResponseDTO response =
+                new BillingResponseDTO();
 
         response.setId(bill.getId());
 
-        response.setPatientId(bill.getPatient().getId());
-        response.setPatientName(
-                bill.getPatient().getFirstName() + " " +
-                        bill.getPatient().getLastName()
+        response.setPatientId(
+                bill.getPatient().getId()
         );
 
-        response.setConsultationFee(bill.getConsultationFee());
-        response.setMedicineCharges(bill.getMedicineCharges());
-        response.setLabCharges(bill.getLabCharges());
-        response.setOtherCharges(bill.getOtherCharges());
-        response.setTotalAmount(bill.getTotalAmount());
+        response.setPatientName(
+                bill.getPatient().getFirstName()
+                        + " "
+                        + bill.getPatient().getLastName()
+        );
 
-        response.setPaymentStatus(bill.getPaymentStatus());
-        response.setPaymentMethod(bill.getPaymentMethod());
-        response.setBillDate(bill.getBillDate());
+        response.setConsultationFee(
+                bill.getConsultationFee()
+        );
+
+        response.setMedicineCharges(
+                bill.getMedicineCharges()
+        );
+
+        response.setLabCharges(
+                bill.getLabCharges()
+        );
+
+        response.setOtherCharges(
+                bill.getOtherCharges()
+        );
+
+        response.setTotalAmount(
+                bill.getTotalAmount()
+        );
+
+        response.setAmountPaid(
+                bill.getAmountPaid()
+        );
+
+        response.setRemainingAmount(
+                bill.getRemainingAmount()
+        );
+
+        response.setPaymentStatus(
+                bill.getPaymentStatus()
+        );
+
+        response.setPaymentMethod(
+                bill.getPaymentMethod()
+        );
+
+        response.setBillDate(
+                bill.getBillDate()
+        );
 
         return response;
     }

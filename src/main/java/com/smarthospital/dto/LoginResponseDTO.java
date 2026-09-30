@@ -6,6 +6,8 @@ public class LoginResponseDTO {
 
     private Long patientId;
 
+    private Long doctorId;
+
     private String firstName;
 
     private String lastName;
@@ -26,6 +28,7 @@ public class LoginResponseDTO {
     public LoginResponseDTO(
             Long id,
             Long patientId,
+            Long doctorId,
             String firstName,
             String lastName,
             String email,
@@ -36,6 +39,7 @@ public class LoginResponseDTO {
 
         this.id = id;
         this.patientId = patientId;
+        this.doctorId = doctorId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -60,6 +64,15 @@ public class LoginResponseDTO {
 
     public void setPatientId(Long patientId) {
         this.patientId = patientId;
+    }
+
+
+    public Long getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(Long doctorId) {
+        this.doctorId = doctorId;
     }
 
 

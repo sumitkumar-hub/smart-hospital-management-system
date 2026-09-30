@@ -154,4 +154,25 @@ public class PrescriptionController {
                 )
         );
     }
+    // ==============================
+// DISPENSE PRESCRIPTION
+// ADMIN + PHARMACIST
+// ==============================
+    @PostMapping("/{id}/dispense")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
+    public ResponseEntity<ApiResponse<PrescriptionResponseDTO>>
+    dispensePrescription(@PathVariable Long id) {
+
+        PrescriptionResponseDTO response =
+                prescriptionService.dispensePrescription(id);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Prescription dispensed successfully",
+                        response,
+                        LocalDateTime.now()
+                )
+        );
+    }
 }

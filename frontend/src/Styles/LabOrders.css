@@ -1,97 +1,236 @@
+/* =========================================
+   LAB ORDERS PAGE
+========================================= */
+
 .lab-orders-page {
+    width: 100%;
+    max-width: 100%;
     padding: 25px;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
+
+
+/* =========================================
+   HEADER
+========================================= */
 
 .lab-orders-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     margin-bottom: 25px;
 }
 
 .lab-orders-header h1 {
     margin: 0;
     font-size: 28px;
+    color: #1f2937;
 }
 
 .lab-orders-header p {
-    margin-top: 6px;
+    margin: 6px 0 0;
     color: #666;
+    font-size: 14px;
 }
 
 .add-order-btn {
     background: #2563eb;
     color: white;
+
     border: none;
     padding: 11px 18px;
+
     border-radius: 6px;
+
     cursor: pointer;
     font-size: 14px;
+
+    white-space: nowrap;
 }
 
 .add-order-btn:hover {
     background: #1d4ed8;
 }
 
+
+/* =========================================
+   SUMMARY CARDS
+========================================= */
+
 .lab-orders-summary {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
     gap: 18px;
+
     margin-bottom: 25px;
+
+    width: 100%;
 }
 
-.summary-card {
+
+/* IMPORTANT:
+   Scoped to Lab Orders so other pages
+   cannot affect these cards.
+*/
+
+.lab-orders-page .summary-card {
     background: white;
+
     border-radius: 10px;
+
     padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    min-width: 0;
+    min-height: 105px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.summary-card h3 {
-    margin: 0 0 10px;
+
+/* Summary title */
+
+.lab-orders-page .summary-card h3 {
+    width: 100%;
+
+    min-height: 24px;
+
+    margin: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
     font-size: 14px;
+    line-height: 20px;
+
+    font-weight: 600;
+
     color: #666;
+
+    text-align: center;
 }
 
-.summary-card strong {
+
+/* Summary number */
+
+.lab-orders-page .summary-card strong {
+    width: 100%;
+
+    height: 34px;
+
+    margin-top: 8px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
     font-size: 26px;
+
+    line-height: 34px;
+
+    font-weight: 700;
+
+    color: #111827;
+
+    text-align: center;
 }
+
+
+/* =========================================
+   TABLE CONTAINER
+========================================= */
 
 .lab-orders-table-container {
+    width: 100%;
+
     background: white;
+
     border-radius: 10px;
+
     overflow-x: auto;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.08);
 }
+
+
+/* =========================================
+   TABLE
+========================================= */
 
 .lab-orders-table {
     width: 100%;
+
+    min-width: 850px;
+
     border-collapse: collapse;
 }
 
 .lab-orders-table th,
 .lab-orders-table td {
     padding: 14px;
+
     text-align: left;
+
     border-bottom: 1px solid #eee;
+
     white-space: nowrap;
 }
 
 .lab-orders-table th {
     background: #f8fafc;
+
     font-size: 13px;
+
+    color: #374151;
+
+    font-weight: 600;
 }
 
 .lab-orders-table td {
     font-size: 14px;
+
+    color: #374151;
 }
 
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
 .status-badge {
-    display: inline-block;
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
     padding: 5px 10px;
+
     border-radius: 20px;
+
     font-size: 12px;
+
     font-weight: 600;
+
+    white-space: nowrap;
 }
 
 .status-pending {
@@ -114,17 +253,31 @@
     color: #991b1b;
 }
 
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
 .action-buttons {
     display: flex;
+
+    align-items: center;
+
     gap: 8px;
+
+    white-space: nowrap;
 }
 
 .edit-btn,
 .delete-btn {
     border: none;
+
     padding: 7px 12px;
+
     border-radius: 5px;
+
     cursor: pointer;
+
     font-size: 12px;
 }
 
@@ -133,72 +286,154 @@
     color: #0369a1;
 }
 
+.edit-btn:hover {
+    background: #bae6fd;
+}
+
 .delete-btn {
     background: #fee2e2;
     color: #dc2626;
 }
 
+.delete-btn:hover {
+    background: #fecaca;
+}
+
+
+/* =========================================
+   NO DATA
+========================================= */
+
 .no-data {
     text-align: center !important;
+
     padding: 35px !important;
+
     color: #777;
 }
 
+
+/* =========================================
+   LOADING
+========================================= */
+
 .loading-text {
     color: #666;
+
+    padding: 20px;
+
+    text-align: center;
 }
+
+
+/* =========================================
+   ERROR
+========================================= */
 
 .error-message {
     background: #fee2e2;
+
     color: #991b1b;
+
     padding: 12px 15px;
+
     border-radius: 6px;
+
     margin-bottom: 20px;
+
+    border: 1px solid #fecaca;
 }
 
 
-/* =========================
-   MODAL
-========================= */
+/* =========================================
+   MODAL OVERLAY
+========================================= */
 
 .modal-overlay {
     position: fixed;
+
     inset: 0;
+
     background: rgba(0, 0, 0, 0.45);
+
     display: flex;
+
     justify-content: center;
     align-items: center;
+
     z-index: 1000;
+
+    padding: 20px;
+
+    box-sizing: border-box;
 }
+
+
+/* =========================================
+   MODAL
+========================================= */
 
 .lab-order-modal {
     background: white;
+
     width: 500px;
-    max-width: 90%;
+
+    max-width: 100%;
+
     border-radius: 10px;
+
     padding: 25px;
+
     max-height: 90vh;
+
     overflow-y: auto;
+
+    box-sizing: border-box;
 }
+
+
+/* =========================================
+   MODAL HEADER
+========================================= */
 
 .modal-header {
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
     margin-bottom: 20px;
 }
 
 .modal-header h2 {
     margin: 0;
+
+    color: #1f2937;
 }
 
 .close-btn {
     background: none;
+
     border: none;
+
     font-size: 28px;
+
     cursor: pointer;
+
     color: #555;
+
+    line-height: 1;
 }
+
+.close-btn:hover {
+    color: #111827;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
 
 .form-group {
     margin-bottom: 17px;
@@ -206,48 +441,94 @@
 
 .form-group label {
     display: block;
+
     margin-bottom: 7px;
+
     font-weight: 600;
+
     font-size: 14px;
+
+    color: #374151;
 }
 
 .form-group select,
 .form-group textarea {
     width: 100%;
+
     box-sizing: border-box;
+
     padding: 10px;
+
     border: 1px solid #d1d5db;
+
     border-radius: 6px;
+
     font-size: 14px;
+
+    color: #1f2937;
+
+    background: #ffffff;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+
+    border-color: #2563eb;
+
+    box-shadow:
+            0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .form-group textarea {
     min-height: 100px;
+
     resize: vertical;
 }
 
+
+/* =========================================
+   MODAL ACTIONS
+========================================= */
+
 .modal-actions {
     display: flex;
+
     justify-content: flex-end;
+
     gap: 10px;
+
     margin-top: 20px;
 }
 
 .cancel-btn,
 .save-btn {
     border: none;
+
     padding: 10px 18px;
+
     border-radius: 6px;
+
     cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: 500;
 }
 
 .cancel-btn {
     background: #e5e7eb;
+
     color: #374151;
+}
+
+.cancel-btn:hover {
+    background: #d1d5db;
 }
 
 .save-btn {
     background: #2563eb;
+
     color: white;
 }
 
@@ -256,17 +537,23 @@
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* =========================================
+   RESPONSIVE - TABLET
+========================================= */
 
 @media (max-width: 900px) {
 
     .lab-orders-summary {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
     }
 
 }
+
+
+/* =========================================
+   RESPONSIVE - MOBILE
+========================================= */
 
 @media (max-width: 600px) {
 
@@ -276,12 +563,37 @@
 
     .lab-orders-header {
         flex-direction: column;
+
         align-items: flex-start;
+
         gap: 15px;
+    }
+
+    .add-order-btn {
+        width: 100%;
     }
 
     .lab-orders-summary {
         grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+    .lab-orders-page .summary-card {
+        min-height: 100px;
+    }
+
+    .lab-order-modal {
+        padding: 20px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .cancel-btn,
+    .save-btn {
+        width: 100%;
     }
 
 }

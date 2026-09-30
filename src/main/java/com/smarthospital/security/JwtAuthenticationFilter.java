@@ -1,5 +1,6 @@
 package com.smarthospital.security;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,14 +25,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private CustomUserDetailsService customUserDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
+
+        String requestUri = request.getRequestURI();
 
         String authHeader = request.getHeader("Authorization");
 
+        System.out.println("========================================");
+        System.out.println("JWT FILTER");
+        System.out.println("Request: " + request.getMethod() + " " + requestUri);
+        System.out.println("Authorization header present: " + (authHeader != null));
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+
+            System.out.println("JWT: No Bearer token found");
+
             filterChain.doFilter(request, response);
             return;
         }
@@ -42,12 +54,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String email = jwtService.extractEmail(token);
 
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            System.out.println("JWT email: " + email);
+
+            if (email == null) {
+                System.out.println("JWT ERROR: Email is null");
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 UserDetails userDetails =
                         customUserDetailsService.loadUserByUsername(email);
 
-                if (jwtService.isTokenValid(token, userDetails.getUsername())) {
+                System.out.println("User found: " + userDetails.getUsername());
+                System.out.println("Authorities: " + userDetails.getAuthorities());
+
+                boolean valid =
+                        jwtService.isTokenValid(
+                                token,
+                                userDetails.getUsername()
+                        );
+
+                System.out.println("JWT valid: " + valid);
+
+                if (valid) {
 
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
@@ -64,15 +95,51 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder
                             .getContext()
                             .setAuthentication(authentication);
+
+                    System.out.println("AUTHENTICATION SUCCESS");
+                    System.out.println(
+                            "Logged in user: "
+                                    + userDetails.getUsername()
+                    );
+                    System.out.println(
+                            "Authorities: "
+                                    + userDetails.getAuthorities()
+                    );
+
+                } else {
+
+                    System.out.println("JWT ERROR: Token is invalid");
                 }
+
+            } else {
+
+                System.out.println(
+                        "SecurityContext already contains authentication"
+                );
             }
+
+        } catch (JwtException e) {
+
+            System.out.println("JWT PARSING ERROR: " + e.getMessage());
+            SecurityContextHolder.clearContext();
 
         } catch (Exception e) {
 
-            SecurityContextHolder.clearContext();
+            System.out.println(
+                    "JWT AUTHENTICATION ERROR: "
+                            + e.getClass().getName()
+            );
 
+            System.out.println(
+                    "Message: "
+                            + e.getMessage()
+            );
+
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
+
+        System.out.println("========================================");
     }
 }

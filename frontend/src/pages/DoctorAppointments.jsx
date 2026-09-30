@@ -83,10 +83,9 @@ const DoctorAppointments = () => {
             setError("");
 
             await api.put(
-                `/appointments/${appointmentId}/status`,
-                {
-                    status: newStatus,
-                }
+                `/appointments/${appointmentId}/status?status=${encodeURIComponent(
+                    newStatus
+                )}`
             );
 
             setAppointments((currentAppointments) =>
@@ -533,4 +532,4 @@ const DoctorAppointments = () => {
     );
 };
 
-export default DoctorAppointments;
+export default DoctorAppointments

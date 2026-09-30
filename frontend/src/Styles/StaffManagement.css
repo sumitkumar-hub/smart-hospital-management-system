@@ -1,0 +1,612 @@
+/* =========================================
+   STAFF MANAGEMENT PAGE
+========================================= */
+
+.staff-management-page {
+    padding: 30px;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+    background: #f5f7fb;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.staff-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.staff-page-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #1f2937;
+}
+
+.staff-page-header p {
+    margin: 7px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   ROLE CARDS
+========================================= */
+
+.staff-role-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.staff-role-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+.staff-role-card > div:last-child {
+    min-width: 0;
+    flex: 1;
+}
+
+.staff-role-card h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    color: #1f2937;
+    white-space: nowrap;
+}
+
+.staff-role-card p {
+    margin: 0;
+    font-size: 12px;
+    color: #6b7280;
+
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+.role-icon {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+    font-size: 17px;
+    color: #ffffff;
+}
+
+.admin-icon {
+    background: #4f46e5;
+}
+
+.doctor-icon {
+    background: #0ea5e9;
+}
+
+.receptionist-icon {
+    background: #8b5cf6;
+}
+
+.pharmacist-icon {
+    background: #10b981;
+}
+
+.laboratory-icon {
+    background: #f59e0b;
+}
+
+
+/* =========================================
+   ALERTS
+========================================= */
+
+.staff-alert {
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.staff-success {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+.staff-error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.staff-alert span {
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-weight: 700;
+}
+
+.staff-success span {
+    background: #10b981;
+    color: white;
+}
+
+.staff-error span {
+    background: #ef4444;
+    color: white;
+}
+
+
+/* =========================================
+   CREATED STAFF
+========================================= */
+
+.created-staff-card {
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    padding: 22px;
+
+    margin-bottom: 25px;
+
+    border: 1px solid #d1fae5;
+
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.created-staff-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    margin-bottom: 20px;
+}
+
+.created-staff-header h2 {
+    margin: 0;
+
+    font-size: 19px;
+
+    color: #065f46;
+}
+
+.created-staff-header p {
+    margin: 5px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+.created-badge {
+    background: #ecfdf5;
+
+    color: #047857;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.created-staff-details {
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 15px;
+
+    width: 100%;
+}
+
+.created-staff-details div {
+    background: #f9fafb;
+
+    padding: 14px;
+
+    border-radius: 9px;
+
+    min-width: 0;
+}
+
+.created-staff-details span {
+    display: block;
+
+    font-size: 11px;
+
+    color: #6b7280;
+
+    margin-bottom: 5px;
+}
+
+.created-staff-details strong {
+    display: block;
+
+    color: #1f2937;
+
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+
+/* =========================================
+   FORM CARD
+========================================= */
+
+.staff-form-card {
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+.staff-form-header {
+    padding: 22px 25px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.staff-form-header h2 {
+    margin: 0;
+
+    color: #1f2937;
+
+    font-size: 20px;
+}
+
+.staff-form-header p {
+    margin: 6px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.staff-form {
+    padding: 25px;
+
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+.form-section {
+    margin-bottom: 30px;
+}
+
+.form-section h3 {
+    margin: 0 0 18px;
+
+    font-size: 16px;
+
+    color: #374151;
+}
+
+.doctor-section {
+    padding: 20px;
+
+    border-radius: 12px;
+
+    background: #f8fbff;
+
+    border: 1px solid #dbeafe;
+
+    box-sizing: border-box;
+}
+
+.doctor-section h3 {
+    color: #1d4ed8;
+}
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+.form-group label {
+    margin-bottom: 7px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #374151;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 11px 13px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    color: #1f2937;
+
+    background: #ffffff;
+
+    outline: none;
+
+    transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #4f46e5;
+
+    box-shadow:
+            0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #9ca3af;
+}
+
+
+/* =========================================
+   CHECKBOX
+========================================= */
+
+.doctor-availability {
+    justify-content: flex-end;
+}
+
+.checkbox-label {
+    display: flex !important;
+
+    flex-direction: row !important;
+
+    align-items: center;
+
+    gap: 10px;
+
+    cursor: pointer;
+
+    margin-top: 30px;
+}
+
+.checkbox-label input {
+    width: 17px;
+
+    height: 17px;
+
+    cursor: pointer;
+
+    accent-color: #4f46e5;
+}
+
+
+/* =========================================
+   FORM ACTIONS
+========================================= */
+
+.form-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn-primary,
+.btn-secondary {
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 11px 20px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.btn-primary {
+    background: #4f46e5;
+
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: #4338ca;
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+
+    color: #374151;
+
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+
+/* =========================================
+   RESPONSIVE - TABLET / SMALL DESKTOP
+========================================= */
+
+@media (max-width: 1100px) {
+
+    .staff-role-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .created-staff-details {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================
+   RESPONSIVE - TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+    .staff-management-page {
+        padding: 20px;
+    }
+
+    .staff-role-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .created-staff-details {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-page-header h1 {
+        font-size: 23px;
+    }
+
+    .staff-role-card {
+        padding: 15px;
+    }
+}
+
+
+/* =========================================
+   RESPONSIVE - MOBILE
+========================================= */
+
+@media (max-width: 500px) {
+
+    .staff-management-page {
+        padding: 15px;
+    }
+
+    .staff-role-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-form {
+        padding: 18px;
+    }
+
+    .staff-form-header {
+        padding: 18px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+
+    .created-staff-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

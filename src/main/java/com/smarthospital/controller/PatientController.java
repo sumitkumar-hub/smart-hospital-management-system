@@ -93,4 +93,42 @@ public class PatientController {
                 response
         );
     }
+
+    // =========================
+    // DEACTIVATE PATIENT
+    // ADMIN ONLY
+    // =========================
+    @PatchMapping("/{id}/deactivate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<PatientResponseDTO> deactivatePatient(
+            @PathVariable Long id) {
+
+        PatientResponseDTO response =
+                patientService.deactivatePatient(id);
+
+        return new ApiResponse<>(
+                true,
+                "Patient deactivated successfully",
+                response
+        );
+    }
+
+    // =========================
+    // ACTIVATE PATIENT
+    // ADMIN ONLY
+    // =========================
+    @PatchMapping("/{id}/activate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<PatientResponseDTO> activatePatient(
+            @PathVariable Long id) {
+
+        PatientResponseDTO response =
+                patientService.activatePatient(id);
+
+        return new ApiResponse<>(
+                true,
+                "Patient activated successfully",
+                response
+        );
+    }
 }

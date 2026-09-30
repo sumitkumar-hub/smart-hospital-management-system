@@ -4,6 +4,11 @@
     background: #f5f7fb;
 }
 
+
+/* =========================================================
+   HEADER
+========================================================= */
+
 .billing-header {
     display: flex;
     justify-content: space-between;
@@ -37,6 +42,11 @@
     background: #eef2f7;
 }
 
+
+/* =========================================================
+   ERROR
+========================================================= */
+
 .billing-error {
     background: #fee2e2;
     color: #991b1b;
@@ -44,6 +54,11 @@
     border-radius: 8px;
     margin-bottom: 20px;
 }
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
 
 .billing-summary {
     display: grid;
@@ -70,6 +85,11 @@
     font-size: 25px;
     color: #111827;
 }
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
 
 .billing-form-section,
 .billing-table-section {
@@ -98,6 +118,11 @@
     font-size: 14px;
 }
 
+
+/* =========================================================
+   CREATE BILL
+========================================================= */
+
 .create-bill-btn {
     border: none;
     background: #2563eb;
@@ -111,6 +136,11 @@
 .create-bill-btn:hover {
     background: #1d4ed8;
 }
+
+
+/* =========================================================
+   FORM
+========================================================= */
 
 .billing-form {
     display: grid;
@@ -147,28 +177,51 @@
     border-color: #2563eb;
 }
 
+
+/* =========================================================
+   TOTAL PREVIEW
+========================================================= */
+
 .billing-total-preview {
     grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 15px;
+
     background: #f3f4f6;
+
     padding: 18px;
+
     border-radius: 8px;
 }
 
+.billing-total-preview div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .billing-total-preview span {
-    color: #374151;
+    color: #6b7280;
+    font-size: 13px;
     font-weight: 600;
 }
 
 .billing-total-preview strong {
-    font-size: 24px;
+    font-size: 22px;
     color: #111827;
 }
 
+
+/* =========================================================
+   FORM BUTTONS
+========================================================= */
+
 .billing-form-actions {
     grid-column: 1 / -1;
+
     display: flex;
     gap: 12px;
 }
@@ -200,6 +253,11 @@
     background: #d1d5db;
 }
 
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
 .billing-filters {
     display: flex;
     gap: 15px;
@@ -228,6 +286,11 @@
     background: #ffffff;
 }
 
+
+/* =========================================================
+   STATUS COUNTS
+========================================================= */
+
 .billing-status-counts {
     display: flex;
     gap: 22px;
@@ -240,6 +303,11 @@
     color: #1f2937;
 }
 
+
+/* =========================================================
+   TABLE
+========================================================= */
+
 .billing-table-container {
     width: 100%;
     overflow-x: auto;
@@ -248,7 +316,7 @@
 .billing-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 1250px;
+    min-width: 1500px;
 }
 
 .billing-table th,
@@ -278,6 +346,21 @@
     color: #111827 !important;
 }
 
+.bill-paid {
+    color: #15803d !important;
+    font-weight: 600;
+}
+
+.bill-remaining {
+    color: #b45309 !important;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PAYMENT STATUS
+========================================================= */
+
 .payment-status {
     display: inline-block;
     padding: 6px 10px;
@@ -306,9 +389,31 @@
     color: #4b5563;
 }
 
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
 .payment-actions {
     display: flex;
     align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.view-invoice-button {
+    border: none;
+    background: #397dbb;
+    color: #ffffff;
+    padding: 7px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.view-invoice-button:hover {
+    background: #28679e;
 }
 
 .mark-paid-btn {
@@ -332,6 +437,11 @@
     font-weight: 700;
 }
 
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
 .empty-bills {
     text-align: center;
     padding: 50px 20px;
@@ -346,6 +456,11 @@
     color: #6b7280;
 }
 
+
+/* =========================================================
+   LOADING
+========================================================= */
+
 .billing-loading {
     min-height: 80vh;
     display: flex;
@@ -355,7 +470,13 @@
     font-size: 18px;
 }
 
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
 @media (max-width: 900px) {
+
     .billing-summary {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -368,9 +489,15 @@
     .billing-form-actions {
         grid-column: auto;
     }
+
+    .billing-total-preview {
+        grid-template-columns: 1fr;
+    }
 }
 
+
 @media (max-width: 650px) {
+
     .receptionist-billing-page {
         padding: 18px;
     }

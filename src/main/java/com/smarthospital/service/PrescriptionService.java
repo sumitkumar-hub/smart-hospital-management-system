@@ -15,6 +15,7 @@ import com.smarthospital.repository.PatientRepository;
 import com.smarthospital.repository.PrescriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -111,9 +112,10 @@ public class PrescriptionService {
 
 
     // =========================
-// GET PRESCRIPTIONS BY PATIENT
-// =========================
-    public List<PrescriptionResponseDTO> getPrescriptionsByPatient(Long patientId) {
+    // GET PRESCRIPTIONS BY PATIENT
+    // =========================
+    public List<PrescriptionResponseDTO> getPrescriptionsByPatient(
+            Long patientId) {
 
         patientRepository.findById(patientId)
                 .orElseThrow(() ->
@@ -124,6 +126,8 @@ public class PrescriptionService {
                 .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
     }
+
+
     // =========================
     // UPDATE PRESCRIPTION
     // =========================
@@ -176,6 +180,41 @@ public class PrescriptionService {
                 prescriptionRepository.save(prescription);
 
         return convertToResponseDTO(updatedPrescription);
+    }
+
+
+    // =========================
+    // DISPENSE PRESCRIPTION
+    // ONE DISPENSE = ONE UNIT
+    // =========================
+    @Transactional
+    public PrescriptionResponseDTO dispensePrescription(Long id) {
+
+        Prescription prescription =
+                prescriptionRepository.findById(id)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Prescription not found"));
+
+        Medicine medicine = prescription.getMedicine();
+
+        if (medicine == null) {
+            throw new ResourceNotFoundException(
+                    "Medicine not found for this prescription");
+        }
+
+        Integer currentStock = medicine.getStockQuantity();
+
+        if (currentStock == null || currentStock <= 0) {
+            throw new IllegalStateException(
+                    "Medicine is out of stock");
+        }
+
+        medicine.setStockQuantity(currentStock - 1);
+
+        medicineRepository.save(medicine);
+
+        return convertToResponseDTO(prescription);
     }
 
 

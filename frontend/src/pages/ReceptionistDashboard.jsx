@@ -15,7 +15,11 @@ function ReceptionistDashboard() {
         const storedUser = localStorage.getItem("user");
 
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            try {
+                setUser(JSON.parse(storedUser));
+            } catch (error) {
+                console.error("Error reading user information:", error);
+            }
         }
 
         fetchDashboardData();
@@ -25,23 +29,44 @@ function ReceptionistDashboard() {
         try {
             setLoading(true);
 
-            const [patientsResponse, appointmentsResponse] = await Promise.all([
-                api.get("/patients"),
-                api.get("/appointments")
-            ]);
+            const [patientsResponse, appointmentsResponse] =
+                await Promise.all([
+                    api.get("/patients"),
+                    api.get("/appointments"),
+                ]);
 
             const patientsData =
-                patientsResponse.data?.data || patientsResponse.data || [];
+                patientsResponse.data?.data ||
+                patientsResponse.data ||
+                [];
 
             const appointmentsData =
-                appointmentsResponse.data?.data || appointmentsResponse.data || [];
+                appointmentsResponse.data?.data ||
+                appointmentsResponse.data ||
+                [];
 
-            setPatients(Array.isArray(patientsData) ? patientsData : []);
+            setPatients(
+                Array.isArray(patientsData) ? patientsData : []
+            );
+
             setAppointments(
-                Array.isArray(appointmentsData) ? appointmentsData : []
+                Array.isArray(appointmentsData)
+                    ? appointmentsData
+                    : []
             );
         } catch (error) {
-            console.error("Error loading receptionist dashboard:", error);
+            console.error(
+                "Error loading receptionist dashboard:",
+                error
+            );
+
+            if (error.response?.status === 401) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                localStorage.removeItem("loginResponse");
+
+                navigate("/login");
+            }
         } finally {
             setLoading(false);
         }
@@ -61,14 +86,22 @@ function ReceptionistDashboard() {
 
     const getPendingAppointments = () => {
         return appointments.filter((appointment) => {
-            const status = appointment.status?.toUpperCase();
-            return status === "PENDING" || status === "SCHEDULED";
+            const status =
+                appointment.status?.toUpperCase();
+
+            return (
+                status === "PENDING" ||
+                status === "SCHEDULED"
+            );
         });
     };
 
     const getCompletedAppointments = () => {
         return appointments.filter((appointment) => {
-            return appointment.status?.toUpperCase() === "COMPLETED";
+            return (
+                appointment.status?.toUpperCase() ===
+                "COMPLETED"
+            );
         });
     };
 
@@ -80,34 +113,101 @@ function ReceptionistDashboard() {
         navigate("/login");
     };
 
+    const getPatientName = (appointment) => {
+        if (appointment.patientName) {
+            return appointment.patientName;
+        }
+
+        if (appointment.patient) {
+            const firstName =
+                appointment.patient.firstName || "";
+
+            const lastName =
+                appointment.patient.lastName || "";
+
+            const fullName =
+                `${firstName} ${lastName}`.trim();
+
+            if (fullName) {
+                return fullName;
+            }
+        }
+
+        return `Patient #${appointment.patientId || "-"}`;
+    };
+
+    const getDoctorName = (appointment) => {
+        if (appointment.doctorName) {
+            return appointment.doctorName;
+        }
+
+        if (appointment.doctor) {
+            const firstName =
+                appointment.doctor.firstName || "";
+
+            const lastName =
+                appointment.doctor.lastName || "";
+
+            const fullName =
+                `${firstName} ${lastName}`.trim();
+
+            if (fullName) {
+                return `Dr. ${fullName}`;
+            }
+        }
+
+        return `Doctor #${appointment.doctorId || "-"}`;
+    };
+
     const todayAppointments = getTodayAppointments();
-    const pendingAppointments = getPendingAppointments();
-    const completedAppointments = getCompletedAppointments();
+    const pendingAppointments =
+        getPendingAppointments();
+
+    const completedAppointments =
+        getCompletedAppointments();
 
     return (
         <div className="receptionist-dashboard">
 
             {/* ================= HEADER ================= */}
+
             <header className="receptionist-header">
+
                 <div>
                     <h1>Receptionist Dashboard</h1>
-                    <p>Manage patients, appointments and hospital operations.</p>
+
+                    <p>
+                        Manage patients, appointments and
+                        hospital operations.
+                    </p>
                 </div>
 
                 <div className="receptionist-header-right">
+
                     <div className="receptionist-user">
+
                         <div className="receptionist-avatar">
-                            {user?.firstName?.charAt(0)?.toUpperCase() || "R"}
+                            {user?.firstName
+                                ?.charAt(0)
+                                ?.toUpperCase() || "R"}
                         </div>
 
                         <div>
+
                             <strong>
                                 {user?.firstName
-                                    ? `${user.firstName} ${user.lastName || ""}`
+                                    ? `${user.firstName} ${
+                                        user.lastName || ""
+                                    }`
                                     : "Receptionist"}
                             </strong>
-                            <span>Receptionist</span>
+
+                            <span>
+                                Receptionist
+                            </span>
+
                         </div>
+
                     </div>
 
                     <button
@@ -116,123 +216,264 @@ function ReceptionistDashboard() {
                     >
                         Logout
                     </button>
+
                 </div>
+
             </header>
 
             {/* ================= SUMMARY ================= */}
+
             <section className="receptionist-summary">
 
                 <div className="receptionist-summary-card">
-                    <div className="summary-icon">👥</div>
+
+                    <div className="summary-icon">
+                        👥
+                    </div>
+
                     <div>
                         <span>Total Patients</span>
-                        <h2>{loading ? "..." : patients.length}</h2>
+
+                        <h2>
+                            {loading
+                                ? "..."
+                                : patients.length}
+                        </h2>
                     </div>
+
                 </div>
 
                 <div className="receptionist-summary-card">
-                    <div className="summary-icon">📅</div>
-                    <div>
-                        <span>Today's Appointments</span>
-                        <h2>{loading ? "..." : todayAppointments.length}</h2>
+
+                    <div className="summary-icon">
+                        📅
                     </div>
+
+                    <div>
+                        <span>
+                            Today's Appointments
+                        </span>
+
+                        <h2>
+                            {loading
+                                ? "..."
+                                : todayAppointments.length}
+                        </h2>
+                    </div>
+
                 </div>
 
                 <div className="receptionist-summary-card">
-                    <div className="summary-icon">⏳</div>
-                    <div>
-                        <span>Pending Appointments</span>
-                        <h2>{loading ? "..." : pendingAppointments.length}</h2>
+
+                    <div className="summary-icon">
+                        ⏳
                     </div>
+
+                    <div>
+                        <span>
+                            Pending Appointments
+                        </span>
+
+                        <h2>
+                            {loading
+                                ? "..."
+                                : pendingAppointments.length}
+                        </h2>
+                    </div>
+
                 </div>
 
                 <div className="receptionist-summary-card">
-                    <div className="summary-icon">✅</div>
-                    <div>
-                        <span>Completed Appointments</span>
-                        <h2>{loading ? "..." : completedAppointments.length}</h2>
+
+                    <div className="summary-icon">
+                        ✅
                     </div>
+
+                    <div>
+                        <span>
+                            Completed Appointments
+                        </span>
+
+                        <h2>
+                            {loading
+                                ? "..."
+                                : completedAppointments.length}
+                        </h2>
+                    </div>
+
                 </div>
 
             </section>
 
             {/* ================= QUICK ACTIONS ================= */}
+
             <section className="receptionist-section">
+
                 <div className="receptionist-section-header">
+
                     <div>
                         <h2>Quick Actions</h2>
-                        <p>Frequently used receptionist operations.</p>
+
+                        <p>
+                            Frequently used receptionist
+                            operations.
+                        </p>
                     </div>
+
                 </div>
 
                 <div className="receptionist-actions">
 
-                    <button
-                        className="receptionist-action-card"
-                        onClick={() => navigate("/receptionist/patients")}
-                    >
-                        <div className="action-icon">👤</div>
-                        <div>
-                            <h3>Manage Patients</h3>
-                            <p>View and manage patient information</p>
-                        </div>
-                        <span>→</span>
-                    </button>
+                    {/* Manage Patients */}
 
                     <button
                         className="receptionist-action-card"
-                        onClick={() => navigate("/receptionist/appointments")}
+                        onClick={() =>
+                            navigate(
+                                "/receptionist/patients"
+                            )
+                        }
                     >
-                        <div className="action-icon">📅</div>
-                        <div>
-                            <h3>Manage Appointments</h3>
-                            <p>Schedule and manage appointments</p>
+
+                        <div className="action-icon">
+                            👤
                         </div>
+
+                        <div>
+                            <h3>
+                                Manage Patients
+                            </h3>
+
+                            <p>
+                                View and manage patient
+                                information
+                            </p>
+                        </div>
+
                         <span>→</span>
+
                     </button>
+
+                    {/* Manage Appointments */}
 
                     <button
                         className="receptionist-action-card"
-                        onClick={() => navigate("/admin/billing")}
+                        onClick={() =>
+                            navigate(
+                                "/receptionist/appointments"
+                            )
+                        }
                     >
-                        <div className="action-icon">💳</div>
+
+                        <div className="action-icon">
+                            📅
+                        </div>
+
+                        <div>
+                            <h3>
+                                Manage Appointments
+                            </h3>
+
+                            <p>
+                                Schedule and manage
+                                appointments
+                            </p>
+                        </div>
+
+                        <span>→</span>
+
+                    </button>
+
+                    {/* Billing */}
+
+                    <button
+                        className="receptionist-action-card"
+                        onClick={() =>
+                            navigate(
+                                "/receptionist/billing"
+                            )
+                        }
+                    >
+
+                        <div className="action-icon">
+                            💳
+                        </div>
+
                         <div>
                             <h3>Billing</h3>
-                            <p>View and manage patient billing</p>
+
+                            <p>
+                                View and manage patient
+                                billing
+                            </p>
                         </div>
+
                         <span>→</span>
+
                     </button>
+
+                    {/* Doctor Information */}
 
                     <button
                         className="receptionist-action-card"
-                        onClick={() => navigate("/doctor")}
+                        onClick={() =>
+                            navigate(
+                                "/receptionist/doctors"
+                            )
+                        }
                     >
-                        <div className="action-icon">🩺</div>
-                        <div>
-                            <h3>Doctor Information</h3>
-                            <p>View available doctor information</p>
+
+                        <div className="action-icon">
+                            🩺
                         </div>
+
+                        <div>
+                            <h3>
+                                Doctor Information
+                            </h3>
+
+                            <p>
+                                View available doctor
+                                information
+                            </p>
+                        </div>
+
                         <span>→</span>
+
                     </button>
 
                 </div>
+
             </section>
 
             {/* ================= TODAY'S APPOINTMENTS ================= */}
+
             <section className="receptionist-section">
 
                 <div className="receptionist-section-header">
+
                     <div>
-                        <h2>Today's Appointments</h2>
-                        <p>Appointments scheduled for today.</p>
+                        <h2>
+                            Today's Appointments
+                        </h2>
+
+                        <p>
+                            Appointments scheduled
+                            for today.
+                        </p>
                     </div>
 
                     <button
                         className="view-all-btn"
-                        onClick={() => navigate("/receptionist/appointments")}
+                        onClick={() =>
+                            navigate(
+                                "/receptionist/appointments"
+                            )
+                        }
                     >
                         View All
                     </button>
+
                 </div>
 
                 <div className="receptionist-table-wrapper">
@@ -243,13 +484,26 @@ function ReceptionistDashboard() {
                         </div>
                     ) : todayAppointments.length === 0 ? (
                         <div className="receptionist-empty">
-                            <div className="empty-icon">📅</div>
-                            <h3>No appointments today</h3>
-                            <p>There are no appointments scheduled for today.</p>
+
+                            <div className="empty-icon">
+                                📅
+                            </div>
+
+                            <h3>
+                                No appointments today
+                            </h3>
+
+                            <p>
+                                There are no appointments
+                                scheduled for today.
+                            </p>
+
                         </div>
                     ) : (
                         <table className="receptionist-table">
+
                             <thead>
+
                             <tr>
                                 <th>Patient</th>
                                 <th>Doctor</th>
@@ -257,56 +511,70 @@ function ReceptionistDashboard() {
                                 <th>Time</th>
                                 <th>Status</th>
                             </tr>
+
                             </thead>
 
                             <tbody>
-                            {todayAppointments.map((appointment) => (
-                                <tr key={appointment.id}>
 
-                                    <td>
-                                        <strong>
-                                            {appointment.patientName ||
-                                            appointment.patient?.firstName
-                                                ? `${appointment.patient?.firstName || ""} ${appointment.patient?.lastName || ""}`
-                                                : `Patient #${appointment.patientId || "-"}`}
-                                        </strong>
-                                    </td>
+                            {todayAppointments.map(
+                                (appointment) => (
+                                    <tr
+                                        key={
+                                            appointment.id
+                                        }
+                                    >
 
-                                    <td>
-                                        {appointment.doctorName ||
-                                        appointment.doctor?.firstName
-                                            ? `Dr. ${appointment.doctor?.firstName || ""} ${appointment.doctor?.lastName || ""}`
-                                            : `Doctor #${appointment.doctorId || "-"}`}
-                                    </td>
+                                        <td>
+                                            <strong>
+                                                {getPatientName(
+                                                    appointment
+                                                )}
+                                            </strong>
+                                        </td>
 
-                                    <td>
-                                        {appointment.appointmentDate ||
-                                            appointment.date ||
-                                            "-"}
-                                    </td>
+                                        <td>
+                                            {getDoctorName(
+                                                appointment
+                                            )}
+                                        </td>
 
-                                    <td>
-                                        {appointment.appointmentTime ||
-                                            appointment.time ||
-                                            "-"}
-                                    </td>
+                                        <td>
+                                            {appointment.appointmentDate ||
+                                                appointment.date ||
+                                                "-"}
+                                        </td>
 
-                                    <td>
-                                            <span
-                                                className={`appointment-status ${
-                                                    appointment.status
-                                                        ?.toLowerCase()
-                                                        .replace(/\s+/g, "-") ||
-                                                    "pending"
-                                                }`}
-                                            >
-                                                {appointment.status || "PENDING"}
-                                            </span>
-                                    </td>
+                                        <td>
+                                            {appointment.appointmentTime ||
+                                                appointment.time ||
+                                                "-"}
+                                        </td>
 
-                                </tr>
-                            ))}
+                                        <td>
+
+                                                <span
+                                                    className={`appointment-status ${
+                                                        appointment.status
+                                                            ?.toLowerCase()
+                                                            .replace(
+                                                                /\s+/g,
+                                                                "-"
+                                                            ) ||
+                                                        "pending"
+                                                    }`}
+                                                >
+                                                    {appointment.status ||
+                                                        "PENDING"}
+                                                </span>
+
+                                        </td>
+
+                                    </tr>
+                                )
+                            )}
+
                             </tbody>
+
                         </table>
                     )}
 
@@ -315,44 +583,62 @@ function ReceptionistDashboard() {
             </section>
 
             {/* ================= INFORMATION ================= */}
+
             <section className="receptionist-info-card">
 
-                <div className="info-icon">🧑‍💼</div>
+                <div className="info-icon">
+                    🧑‍💼
+                </div>
 
                 <div className="info-content">
-                    <h2>Receptionist Information</h2>
+
+                    <h2>
+                        Receptionist Information
+                    </h2>
 
                     <div className="info-grid">
 
                         <div>
                             <span>Name</span>
+
                             <strong>
                                 {user?.firstName
-                                    ? `${user.firstName} ${user.lastName || ""}`
+                                    ? `${user.firstName} ${
+                                        user.lastName || ""
+                                    }`
                                     : "Receptionist"}
                             </strong>
                         </div>
 
                         <div>
                             <span>Email</span>
+
                             <strong>
-                                {user?.email || "Not available"}
+                                {user?.email ||
+                                    "Not available"}
                             </strong>
                         </div>
 
                         <div>
                             <span>Role</span>
-                            <strong>RECEPTIONIST</strong>
+
+                            <strong>
+                                RECEPTIONIST
+                            </strong>
                         </div>
 
                         <div>
-                            <span>Account Status</span>
+                            <span>
+                                Account Status
+                            </span>
+
                             <strong className="active-status">
                                 Active
                             </strong>
                         </div>
 
                     </div>
+
                 </div>
 
             </section>

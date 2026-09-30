@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,12 +20,18 @@ public class BillingController {
     @Autowired
     private BillingService billingService;
 
-    // Create Bill
+
+    // =========================================================
+    // CREATE BILL
+    // =========================================================
+
     @PostMapping
     public ResponseEntity<ApiResponse<BillingResponseDTO>> createBill(
-            @Valid @RequestBody BillingRequestDTO request) {
+            @Valid @RequestBody BillingRequestDTO request
+    ) {
 
-        BillingResponseDTO response = billingService.createBill(request);
+        BillingResponseDTO response =
+                billingService.createBill(request);
 
         ApiResponse<BillingResponseDTO> apiResponse =
                 new ApiResponse<>(
@@ -37,7 +44,11 @@ public class BillingController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Get All Bills
+
+    // =========================================================
+    // GET ALL BILLS
+    // =========================================================
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getAllBills() {
 
@@ -55,10 +66,15 @@ public class BillingController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Get Bill By ID
+
+    // =========================================================
+    // GET BILL BY ID
+    // =========================================================
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> getBillById(
-            @PathVariable Long id) {
+            @PathVariable Long id
+    ) {
 
         BillingResponseDTO response =
                 billingService.getBillById(id);
@@ -74,10 +90,15 @@ public class BillingController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Get Bills By Patient
+
+    // =========================================================
+    // GET BILLS BY PATIENT
+    // =========================================================
+
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<ApiResponse<List<BillingResponseDTO>>> getBillsByPatient(
-            @PathVariable Long patientId) {
+            @PathVariable Long patientId
+    ) {
 
         List<BillingResponseDTO> response =
                 billingService.getBillsByPatient(patientId);
@@ -93,11 +114,16 @@ public class BillingController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Update Bill
+
+    // =========================================================
+    // UPDATE BILL
+    // =========================================================
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> updateBill(
             @PathVariable Long id,
-            @Valid @RequestBody BillingRequestDTO request) {
+            @Valid @RequestBody BillingRequestDTO request
+    ) {
 
         BillingResponseDTO response =
                 billingService.updateBill(id, request);
@@ -113,19 +139,29 @@ public class BillingController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Update Payment Status
+
+    // =========================================================
+    // UPDATE PAYMENT
+    // =========================================================
+
     @PatchMapping("/{id}/payment-status")
     public ResponseEntity<ApiResponse<BillingResponseDTO>> updatePaymentStatus(
             @PathVariable Long id,
-            @RequestParam String paymentStatus) {
+            @RequestParam String paymentStatus,
+            @RequestParam(required = false) BigDecimal amountPaid
+    ) {
 
         BillingResponseDTO response =
-                billingService.updatePaymentStatus(id, paymentStatus);
+                billingService.updatePaymentStatus(
+                        id,
+                        paymentStatus,
+                        amountPaid
+                );
 
         ApiResponse<BillingResponseDTO> apiResponse =
                 new ApiResponse<>(
                         true,
-                        "Payment status updated successfully",
+                        "Payment details updated successfully",
                         response,
                         LocalDateTime.now()
                 );
@@ -133,10 +169,15 @@ public class BillingController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Delete Bill
+
+    // =========================================================
+    // DELETE BILL
+    // =========================================================
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteBill(
-            @PathVariable Long id) {
+            @PathVariable Long id
+    ) {
 
         billingService.deleteBill(id);
 

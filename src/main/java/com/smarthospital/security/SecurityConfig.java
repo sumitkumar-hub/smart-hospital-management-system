@@ -65,10 +65,13 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://localhost:5174"
-        ));
+        configuration.setAllowedOrigins(
+                List.of(
+                        "http://localhost:5173",
+                        "http://localhost:5174",
+                        "http://localhost:5175"
+                )
+        );
 
         configuration.setAllowedMethods(List.of(
                 "GET",
@@ -113,33 +116,48 @@ public class SecurityConfig {
 
         http
 
+                // =========================
                 // CORS
+                // =========================
+
                 .cors(cors ->
                         cors.configurationSource(
                                 corsConfigurationSource()
                         )
                 )
 
+                // =========================
                 // CSRF
+                // =========================
+
                 .csrf(csrf ->
                         csrf.disable()
                 )
 
+                // =========================
                 // Exception Handling
+                // =========================
+
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint(
                                 jwtAuthenticationEntryPoint
                         )
                 )
 
+                // =========================
                 // Stateless Session
+                // =========================
+
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
                 )
 
+                // =========================
                 // Authorization
+                // =========================
+
                 .authorizeHttpRequests(auth -> auth
 
                         // CORS preflight
@@ -147,6 +165,14 @@ public class SecurityConfig {
                                 HttpMethod.OPTIONS,
                                 "/**"
                         )
+                        .permitAll()
+
+
+                        // =========================
+                        // ERROR ENDPOINT
+                        // =========================
+
+                        .requestMatchers("/error")
                         .permitAll()
 
 
@@ -183,7 +209,10 @@ public class SecurityConfig {
                 )
 
 
-                // JWT Filter
+                // =========================
+                // JWT FILTER
+                // =========================
+
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class

@@ -9,7 +9,6 @@ function Patients() {
     // =========================
 
     const [patients, setPatients] = useState([]);
-
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -29,11 +28,10 @@ function Patients() {
     const [viewLoading, setViewLoading] = useState(false);
 
     // =========================
-    // DELETE
+    // ACTIVATE / DEACTIVATE
     // =========================
 
-    const [deletingId, setDeletingId] = useState(null);
-
+    const [statusChangingId, setStatusChangingId] = useState(null);
 
     // =========================
     // FORM DATA
@@ -55,7 +53,6 @@ function Patients() {
 
     const [formData, setFormData] = useState(emptyForm);
 
-
     // =========================
     // LOAD PATIENTS
     // =========================
@@ -63,7 +60,6 @@ function Patients() {
     useEffect(() => {
         fetchPatients();
     }, []);
-
 
     const fetchPatients = async () => {
 
@@ -98,10 +94,8 @@ function Patients() {
         } finally {
 
             setLoading(false);
-
         }
     };
-
 
     // =========================
     // FORM CHANGE
@@ -115,9 +109,7 @@ function Patients() {
             ...previous,
             [name]: value,
         }));
-
     };
-
 
     // =========================
     // OPEN ADD FORM
@@ -126,15 +118,10 @@ function Patients() {
     const handleAddPatient = () => {
 
         setEditingPatient(null);
-
         setFormData(emptyForm);
-
         setError("");
-
         setShowForm(true);
-
     };
-
 
     // =========================
     // OPEN EDIT FORM
@@ -164,11 +151,8 @@ function Patients() {
         });
 
         setError("");
-
         setShowForm(true);
-
     };
-
 
     // =========================
     // CLOSE FORM
@@ -177,13 +161,9 @@ function Patients() {
     const handleCancelForm = () => {
 
         setShowForm(false);
-
         setEditingPatient(null);
-
         setFormData(emptyForm);
-
     };
-
 
     // =========================
     // ADD / UPDATE PATIENT
@@ -194,7 +174,6 @@ function Patients() {
         e.preventDefault();
 
         setSaving(true);
-
         setError("");
 
         try {
@@ -230,7 +209,6 @@ function Patients() {
                     "Patient created:",
                     response.data
                 );
-
             }
 
             handleCancelForm();
@@ -252,10 +230,8 @@ function Patients() {
         } finally {
 
             setSaving(false);
-
         }
     };
-
 
     // =========================
     // VIEW PATIENT
@@ -264,7 +240,6 @@ function Patients() {
     const handleViewPatient = async (id) => {
 
         setViewLoading(true);
-
         setError("");
 
         try {
@@ -306,33 +281,27 @@ function Patients() {
                     error.response?.data?.message ||
                     "Unable to load patient details"
                 );
-
             }
 
         } finally {
 
             setViewLoading(false);
-
         }
     };
-
 
     // =========================
     // CLOSE VIEW
     // =========================
 
     const closePatientView = () => {
-
         setSelectedPatient(null);
-
     };
 
-
     // =========================
-    // DELETE / DEACTIVATE
+    // DEACTIVATE PATIENT
     // =========================
 
-    const handleDeletePatient = async (patient) => {
+    const handleDeactivatePatient = async (patient) => {
 
         const confirmed = window.confirm(
             `Are you sure you want to deactivate ${patient.firstName} ${patient.lastName}?`
@@ -342,23 +311,18 @@ function Patients() {
             return;
         }
 
-        setDeletingId(patient.id);
-
+        setStatusChangingId(patient.id);
         setError("");
 
         try {
 
-            /*
-             * Try DELETE endpoint.
-             */
-
-            await api.delete(
-                `/patients/${patient.id}`
+            const response = await api.patch(
+                `/patients/${patient.id}/deactivate`
             );
 
             console.log(
-                "Patient deleted/deactivated:",
-                patient.id
+                "Patient deactivated:",
+                response.data
             );
 
             await fetchPatients();
@@ -366,22 +330,68 @@ function Patients() {
         } catch (error) {
 
             console.error(
-                "Delete patient error:",
+                "Deactivate patient error:",
                 error
             );
 
             setError(
                 error.response?.data?.message ||
-                "Unable to delete patient"
+                "Unable to deactivate patient"
             );
 
         } finally {
 
-            setDeletingId(null);
-
+            setStatusChangingId(null);
         }
     };
 
+    // =========================
+    // ACTIVATE PATIENT
+    // =========================
+
+    const handleActivatePatient = async (patient) => {
+
+        const confirmed = window.confirm(
+            `Are you sure you want to activate ${patient.firstName} ${patient.lastName}?`
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        setStatusChangingId(patient.id);
+        setError("");
+
+        try {
+
+            const response = await api.patch(
+                `/patients/${patient.id}/activate`
+            );
+
+            console.log(
+                "Patient activated:",
+                response.data
+            );
+
+            await fetchPatients();
+
+        } catch (error) {
+
+            console.error(
+                "Activate patient error:",
+                error
+            );
+
+            setError(
+                error.response?.data?.message ||
+                "Unable to activate patient"
+            );
+
+        } finally {
+
+            setStatusChangingId(null);
+        }
+    };
 
     // =========================
     // LOADING
@@ -398,9 +408,11 @@ function Patients() {
 
             </div>
         );
-
     }
 
+    // =========================
+    // MAIN UI
+    // =========================
 
     return (
 
@@ -424,7 +436,6 @@ function Patients() {
 
                 </div>
 
-
                 <button
                     type="button"
                     className="add-patient-btn"
@@ -435,7 +446,6 @@ function Patients() {
 
             </div>
 
-
             {/* =========================
                 ERROR
             ========================= */}
@@ -443,13 +453,10 @@ function Patients() {
             {error && (
 
                 <div className="patients-error">
-
                     {error}
-
                 </div>
 
             )}
-
 
             {/* =========================
                 ADD / EDIT FORM
@@ -478,7 +485,6 @@ function Patients() {
 
                         </div>
 
-
                         <button
                             type="button"
                             className="close-btn"
@@ -488,7 +494,6 @@ function Patients() {
                         </button>
 
                     </div>
-
 
                     <form
                         className="patient-form"
@@ -514,7 +519,6 @@ function Patients() {
 
                         </div>
 
-
                         {/* LAST NAME */}
 
                         <div className="form-group">
@@ -534,7 +538,6 @@ function Patients() {
 
                         </div>
 
-
                         {/* DATE OF BIRTH */}
 
                         <div className="form-group">
@@ -552,7 +555,6 @@ function Patients() {
                             />
 
                         </div>
-
 
                         {/* GENDER */}
 
@@ -589,7 +591,6 @@ function Patients() {
 
                         </div>
 
-
                         {/* PHONE */}
 
                         <div className="form-group">
@@ -609,7 +610,6 @@ function Patients() {
 
                         </div>
 
-
                         {/* EMAIL */}
 
                         <div className="form-group">
@@ -627,7 +627,6 @@ function Patients() {
                             />
 
                         </div>
-
 
                         {/* ADDRESS */}
 
@@ -647,7 +646,6 @@ function Patients() {
                             />
 
                         </div>
-
 
                         {/* BLOOD GROUP */}
 
@@ -704,7 +702,6 @@ function Patients() {
 
                         </div>
 
-
                         {/* EMERGENCY CONTACT NAME */}
 
                         <div className="form-group">
@@ -725,7 +722,6 @@ function Patients() {
                             />
 
                         </div>
-
 
                         {/* EMERGENCY CONTACT PHONE */}
 
@@ -748,8 +744,7 @@ function Patients() {
 
                         </div>
 
-
-                        {/* ACTIVE */}
+                        {/* STATUS */}
 
                         {editingPatient && (
 
@@ -790,7 +785,6 @@ function Patients() {
 
                         )}
 
-
                         {/* FORM BUTTONS */}
 
                         <div className="patient-form-actions">
@@ -803,7 +797,6 @@ function Patients() {
                             >
                                 Cancel
                             </button>
-
 
                             <button
                                 type="submit"
@@ -827,7 +820,6 @@ function Patients() {
 
             )}
 
-
             {/* =========================
                 PATIENT LIST
             ========================= */}
@@ -846,13 +838,10 @@ function Patients() {
 
                 </div>
 
-
                 {patients.length === 0 ? (
 
                     <div className="no-patients">
-
                         No patients found
-
                     </div>
 
                 ) : (
@@ -866,27 +855,18 @@ function Patients() {
                             <tr>
 
                                 <th>ID</th>
-
                                 <th>Name</th>
-
                                 <th>Date of Birth</th>
-
                                 <th>Gender</th>
-
                                 <th>Phone</th>
-
                                 <th>Email</th>
-
                                 <th>Blood Group</th>
-
                                 <th>Status</th>
-
                                 <th>Actions</th>
 
                             </tr>
 
                             </thead>
-
 
                             <tbody>
 
@@ -898,46 +878,32 @@ function Patients() {
                                         {patient.id}
                                     </td>
 
-
                                     <td>
-
                                         <strong>
                                             {patient.firstName}{" "}
                                             {patient.lastName}
                                         </strong>
-
                                     </td>
-
 
                                     <td>
-                                        {patient.dateOfBirth ||
-                                            "-"}
+                                        {patient.dateOfBirth || "-"}
                                     </td>
-
 
                                     <td>
-                                        {patient.gender ||
-                                            "-"}
+                                        {patient.gender || "-"}
                                     </td>
-
 
                                     <td>
-                                        {patient.phone ||
-                                            "-"}
+                                        {patient.phone || "-"}
                                     </td>
-
 
                                     <td>
-                                        {patient.email ||
-                                            "-"}
+                                        {patient.email || "-"}
                                     </td>
-
 
                                     <td>
-                                        {patient.bloodGroup ||
-                                            "-"}
+                                        {patient.bloodGroup || "-"}
                                     </td>
-
 
                                     <td>
 
@@ -948,15 +914,12 @@ function Patients() {
                                                         : "status-inactive"
                                                 }
                                             >
-
                                                 {patient.active
                                                     ? "Active"
                                                     : "Inactive"}
-
                                             </span>
 
                                     </td>
-
 
                                     <td>
 
@@ -972,13 +935,10 @@ function Patients() {
                                                         patient.id
                                                     )
                                                 }
-                                                disabled={
-                                                    viewLoading
-                                                }
+                                                disabled={viewLoading}
                                             >
                                                 View
                                             </button>
-
 
                                             {/* EDIT */}
 
@@ -994,29 +954,51 @@ function Patients() {
                                                 Edit
                                             </button>
 
+                                            {/* ACTIVATE / DEACTIVATE */}
 
-                                            {/* DELETE */}
+                                            {patient.active ? (
 
-                                            <button
-                                                type="button"
-                                                className="delete-btn"
-                                                onClick={() =>
-                                                    handleDeletePatient(
-                                                        patient
-                                                    )
-                                                }
-                                                disabled={
-                                                    deletingId ===
+                                                <button
+                                                    type="button"
+                                                    className="deactivate-btn"
+                                                    onClick={() =>
+                                                        handleDeactivatePatient(
+                                                            patient
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        statusChangingId ===
+                                                        patient.id
+                                                    }
+                                                >
+                                                    {statusChangingId ===
                                                     patient.id
-                                                }
-                                            >
+                                                        ? "Processing..."
+                                                        : "Deactivate"}
+                                                </button>
 
-                                                {deletingId ===
-                                                patient.id
-                                                    ? "Deleting..."
-                                                    : "Delete"}
+                                            ) : (
 
-                                            </button>
+                                                <button
+                                                    type="button"
+                                                    className="activate-btn"
+                                                    onClick={() =>
+                                                        handleActivatePatient(
+                                                            patient
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        statusChangingId ===
+                                                        patient.id
+                                                    }
+                                                >
+                                                    {statusChangingId ===
+                                                    patient.id
+                                                        ? "Processing..."
+                                                        : "Activate"}
+                                                </button>
+
+                                            )}
 
                                         </div>
 
@@ -1035,7 +1017,6 @@ function Patients() {
                 )}
 
             </div>
-
 
             {/* =========================
                 VIEW PATIENT MODAL
@@ -1070,7 +1051,6 @@ function Patients() {
 
                             </div>
 
-
                             <button
                                 type="button"
                                 className="close-btn"
@@ -1080,7 +1060,6 @@ function Patients() {
                             </button>
 
                         </div>
-
 
                         <div className="patient-details">
 
@@ -1099,7 +1078,6 @@ function Patients() {
 
                             </div>
 
-
                             {/* DOB */}
 
                             <div className="detail-item">
@@ -1109,12 +1087,10 @@ function Patients() {
                                 </span>
 
                                 <strong>
-                                    {selectedPatient.dateOfBirth ||
-                                        "-"}
+                                    {selectedPatient.dateOfBirth || "-"}
                                 </strong>
 
                             </div>
-
 
                             {/* GENDER */}
 
@@ -1125,12 +1101,10 @@ function Patients() {
                                 </span>
 
                                 <strong>
-                                    {selectedPatient.gender ||
-                                        "-"}
+                                    {selectedPatient.gender || "-"}
                                 </strong>
 
                             </div>
-
 
                             {/* PHONE */}
 
@@ -1141,12 +1115,10 @@ function Patients() {
                                 </span>
 
                                 <strong>
-                                    {selectedPatient.phone ||
-                                        "-"}
+                                    {selectedPatient.phone || "-"}
                                 </strong>
 
                             </div>
-
 
                             {/* EMAIL */}
 
@@ -1157,12 +1129,10 @@ function Patients() {
                                 </span>
 
                                 <strong>
-                                    {selectedPatient.email ||
-                                        "-"}
+                                    {selectedPatient.email || "-"}
                                 </strong>
 
                             </div>
-
 
                             {/* BLOOD GROUP */}
 
@@ -1173,12 +1143,10 @@ function Patients() {
                                 </span>
 
                                 <strong>
-                                    {selectedPatient.bloodGroup ||
-                                        "-"}
+                                    {selectedPatient.bloodGroup || "-"}
                                 </strong>
 
                             </div>
-
 
                             {/* ADDRESS */}
 
@@ -1189,12 +1157,10 @@ function Patients() {
                                 </span>
 
                                 <strong>
-                                    {selectedPatient.address ||
-                                        "-"}
+                                    {selectedPatient.address || "-"}
                                 </strong>
 
                             </div>
-
 
                             {/* EMERGENCY CONTACT */}
 
@@ -1211,7 +1177,6 @@ function Patients() {
 
                             </div>
 
-
                             {/* EMERGENCY PHONE */}
 
                             <div className="detail-item">
@@ -1226,7 +1191,6 @@ function Patients() {
                                 </strong>
 
                             </div>
-
 
                             {/* STATUS */}
 
@@ -1243,17 +1207,14 @@ function Patients() {
                                             : "status-inactive"
                                     }
                                 >
-
                                     {selectedPatient.active
                                         ? "Active"
                                         : "Inactive"}
-
                                 </strong>
 
                             </div>
 
                         </div>
-
 
                         <div className="patient-modal-footer">
 

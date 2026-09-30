@@ -1,4 +1,4 @@
-.patients-page {
+\.patients-page {
     padding: 30px;
 }
 
@@ -94,6 +94,10 @@
     background: #f8fafc;
 }
 
+/* =========================
+   STATUS
+========================= */
+
 .status-active,
 .status-inactive {
     display: inline-block;
@@ -113,33 +117,69 @@
     color: #b91c1c;
 }
 
+/* =========================
+   ACTION BUTTONS
+========================= */
+
 .patient-actions {
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
 }
 
 .patient-actions button {
     border: none;
-    padding: 6px 10px;
-    border-radius: 5px;
+    padding: 7px 11px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.patient-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .view-btn {
-    background: #e0f2fe;
-    color: #0369a1;
+    background: #2563eb;
+    color: white;
+}
+
+.view-btn:hover {
+    background: #1d4ed8;
 }
 
 .edit-btn {
-    background: #fef3c7;
-    color: #92400e;
+    background: #f59e0b;
+    color: white;
 }
 
-.delete-btn {
-    background: #fee2e2;
-    color: #b91c1c;
+.edit-btn:hover {
+    background: #d97706;
 }
+
+.deactivate-btn {
+    background: #dc2626;
+    color: white;
+}
+
+.deactivate-btn:hover {
+    background: #b91c1c;
+}
+
+.activate-btn {
+    background: #16a34a;
+    color: white;
+}
+
+.activate-btn:hover {
+    background: #15803d;
+}
+
+/* =========================
+   NO PATIENTS
+========================= */
 
 .no-patients {
     text-align: center;
@@ -147,24 +187,8 @@
     color: #666;
 }
 
-@media (max-width: 768px) {
-
-    .patients-page {
-        padding: 15px;
-    }
-
-    .patients-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-    .add-patient-btn {
-        width: 100%;
-    }
-}
 /* =========================
-   ADD PATIENT FORM
+   ADD / EDIT FORM
 ========================= */
 
 .patient-form-card {
@@ -250,9 +274,17 @@
     background: #e5e7eb;
 }
 
+.cancel-btn:hover {
+    background: #d1d5db;
+}
+
 .save-patient-btn {
     background: #2563eb;
     color: white;
+}
+
+.save-patient-btn:hover {
+    background: #1d4ed8;
 }
 
 .cancel-btn:disabled,
@@ -261,26 +293,6 @@
     cursor: not-allowed;
 }
 
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 768px) {
-
-    .patient-form {
-        grid-template-columns: 1fr;
-    }
-
-    .form-group-full {
-        grid-column: auto;
-    }
-
-    .patient-form-actions {
-        grid-column: auto;
-    }
-
-}
 /* =========================
    VIEW PATIENT MODAL
 ========================= */
@@ -357,64 +369,38 @@
     border-top: 1px solid #e5e7eb;
 }
 
-
-/* =========================
-   ACTION BUTTONS
-========================= */
-
-.patient-actions {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.patient-actions button {
-    border: none;
-    padding: 7px 11px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.patient-actions button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.view-btn {
-    background: #2563eb;
-    color: white;
-}
-
-.edit-btn {
-    background: #f59e0b;
-    color: white;
-}
-
-.delete-btn {
-    background: #dc2626;
-    color: white;
-}
-
-
-/* =========================
-   STATUS
-========================= */
-
-.status-active {
-    color: #15803d;
-    font-weight: 600;
-}
-
-.status-inactive {
-    color: #dc2626;
-    font-weight: 600;
-}
-
-
 /* =========================
    MOBILE
 ========================= */
+
+@media (max-width: 768px) {
+
+    .patients-page {
+        padding: 15px;
+    }
+
+    .patients-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .add-patient-btn {
+        width: 100%;
+    }
+
+    .patient-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group-full {
+        grid-column: auto;
+    }
+
+    .patient-form-actions {
+        grid-column: auto;
+    }
+}
 
 @media (max-width: 700px) {
 
@@ -433,5 +419,4 @@
     .patient-actions {
         flex-direction: column;
     }
-
 }

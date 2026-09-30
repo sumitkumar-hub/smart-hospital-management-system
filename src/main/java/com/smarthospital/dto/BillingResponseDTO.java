@@ -11,15 +11,25 @@ public class BillingResponseDTO {
     private Long id;
 
     private Long patientId;
+
     private String patientName;
 
     private BigDecimal consultationFee;
+
     private BigDecimal medicineCharges;
+
     private BigDecimal labCharges;
+
     private BigDecimal otherCharges;
+
     private BigDecimal totalAmount;
 
+    private BigDecimal amountPaid;
+
+    private BigDecimal remainingAmount;
+
     private String paymentStatus;
+
     private String paymentMethod;
 
     private LocalDate billDate;

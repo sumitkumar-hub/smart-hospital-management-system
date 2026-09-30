@@ -3,8 +3,10 @@ package com.smarthospital.service;
 import com.smarthospital.dto.LoginRequestDTO;
 import com.smarthospital.dto.LoginResponseDTO;
 import com.smarthospital.dto.RegisterRequestDTO;
+import com.smarthospital.entity.Doctor;
 import com.smarthospital.entity.Patient;
 import com.smarthospital.entity.User;
+import com.smarthospital.repository.DoctorRepository;
 import com.smarthospital.repository.PatientRepository;
 import com.smarthospital.repository.UserRepository;
 import com.smarthospital.security.JwtService;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.smarthospital.exception.InactiveAccountException;
 
 @Service
 public class AuthService {
@@ -21,6 +24,9 @@ public class AuthService {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private DoctorRepository doctorRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -53,6 +59,29 @@ public class AuthService {
         }
 
 
+        // ==========================
+        // Check Patient Status
+        // ==========================
+
+        if ("PATIENT".equalsIgnoreCase(user.getRole())) {
+
+            Patient patient = patientRepository.findByUserId(user.getId())
+                    .orElseThrow(() ->
+                            new RuntimeException("Patient profile not found")
+                    );
+
+            if (Boolean.FALSE.equals(patient.getActive())) {
+                throw new InactiveAccountException(
+                        "Your patient account is inactive. Please contact the hospital administrator."
+                );
+            }
+        }
+
+
+        // ==========================
+        // Generate JWT
+        // ==========================
+
         String token =
                 jwtService.generateToken(user.getEmail());
 
@@ -70,12 +99,28 @@ public class AuthService {
         response.setType("Bearer");
 
 
-        // Get Patient ID for patient users
+        // ==========================
+        // Get Patient ID
+        // ==========================
+
         if ("PATIENT".equalsIgnoreCase(user.getRole())) {
 
             patientRepository.findByUserId(user.getId())
                     .ifPresent(patient ->
                             response.setPatientId(patient.getId())
+                    );
+        }
+
+
+        // ==========================
+        // Get Doctor ID
+        // ==========================
+
+        if ("DOCTOR".equalsIgnoreCase(user.getRole())) {
+
+            doctorRepository.findByEmail(user.getEmail())
+                    .ifPresent(doctor ->
+                            response.setDoctorId(doctor.getId())
                     );
         }
 
@@ -151,6 +196,7 @@ public class AuthService {
                 )
         );
 
+
         // Public registration is ALWAYS PATIENT
         user.setRole("PATIENT");
 
@@ -210,7 +256,10 @@ public class AuthService {
         patient.setActive(true);
 
 
+        // ==========================
         // Save Patient
+        // ==========================
+
         return patientRepository.save(patient);
     }
 }

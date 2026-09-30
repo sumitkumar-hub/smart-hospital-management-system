@@ -1,5 +1,6 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import authService from "../services/authService";
+import "../Styles/AdminLayout.css";
 
 function AdminLayout() {
     const navigate = useNavigate();
@@ -20,61 +21,82 @@ function AdminLayout() {
 
             <aside className="sidebar">
 
-                <h2>Smart Hospital</h2>
+                <div className="sidebar-logo">
+                    <h2>Smart Hospital</h2>
+                </div>
 
-                <nav>
+                <nav className="sidebar-nav">
 
-                    {/* Dashboard */}
                     <Link to="/admin">
                         Dashboard
                     </Link>
 
-                    {/* Patients */}
                     <Link to="/admin/patients">
                         Patients
                     </Link>
 
-                    {/* Doctors */}
                     <Link to="/admin/doctors">
                         Doctors
                     </Link>
 
-                    {/* Appointments */}
                     <Link to="/admin/appointments">
                         Appointments
                     </Link>
 
-                    {/* Medical Records */}
                     <Link to="/admin/medical-records">
                         Medical Records
                     </Link>
 
-                    {/* Prescriptions */}
                     <Link to="/admin/prescriptions">
                         Prescriptions
                     </Link>
 
-                    {/* Pharmacy Inventory */}
                     <Link to="/admin/pharmacy-inventory">
                         Pharmacy Inventory
                     </Link>
 
-                    {/* Billing */}
                     <Link to="/admin/billing">
                         Billing
                     </Link>
 
-                    {/* Lab Tests */}
                     <Link to="/admin/lab-tests">
                         Lab Tests
                     </Link>
 
+                    <Link to="/admin/lab-orders">
+                        Lab Orders
+                    </Link>
+
+                    <Link to="/admin/lab-reports">
+                        Lab Reports
+                    </Link>
+
+                    <Link to="/admin/staff">
+                        Staff Management
+                    </Link>
+
                 </nav>
 
-                {/* Logout */}
-                <button onClick={handleLogout}>
-                    Logout
-                </button>
+                <div className="sidebar-bottom">
+
+                    <div className="sidebar-user">
+                        <span>
+                            {user?.firstName} {user?.lastName}
+                        </span>
+
+                        <small>
+                            {user?.role}
+                        </small>
+                    </div>
+
+                    <button
+                        className="logout-btn"
+                        onClick={handleLogout}
+                    >
+                        Logout
+                    </button>
+
+                </div>
 
             </aside>
 
@@ -85,7 +107,6 @@ function AdminLayout() {
 
             <main className="admin-main">
 
-                {/* Header */}
                 <header className="admin-header">
 
                     <div>
@@ -99,7 +120,7 @@ function AdminLayout() {
                         </span>
 
                         <span>
-                            {" "}({user?.role})
+                            ({user?.role})
                         </span>
 
                     </div>
@@ -107,7 +128,6 @@ function AdminLayout() {
                 </header>
 
 
-                {/* Page Content */}
                 <section className="admin-content">
 
                     <Outlet />

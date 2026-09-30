@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import "../Styles/PatientDashboard.css";
+import authService from "../services/authService";
 
 function PatientDashboard() {
-
     const navigate = useNavigate();
 
     const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -10,6 +10,34 @@ function PatientDashboard() {
     const fullName =
         `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
         "Patient";
+
+    const handleLogout = () => {
+        authService.logout();
+        navigate("/login");
+    };
+
+    const cardHeaderStyle = {
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        width: "100%",
+        gap: "20px"
+    };
+
+    const viewAllStyle = {
+        marginLeft: "auto",
+        flexShrink: 0,
+        alignSelf: "flex-start",
+        marginTop: "2px",
+        padding: "0",
+        border: "none",
+        background: "transparent",
+        color: "#4c63e7",
+        fontSize: "13px",
+        fontWeight: "600",
+        cursor: "pointer",
+        whiteSpace: "nowrap"
+    };
 
     return (
         <div className="patient-dashboard">
@@ -20,12 +48,20 @@ function PatientDashboard() {
 
                 <div>
                     <h1>Patient Dashboard</h1>
+
                     <p>
                         Welcome back, <strong>{fullName}</strong>
                     </p>
                 </div>
 
-                <div className="patient-profile">
+                <div
+                    className="patient-profile"
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px"
+                    }}
+                >
 
                     <div className="profile-avatar">
                         {user.firstName
@@ -37,6 +73,23 @@ function PatientDashboard() {
                         <strong>{fullName}</strong>
                         <span>{user.email || "Patient"}</span>
                     </div>
+
+                    <button
+                        onClick={handleLogout}
+                        style={{
+                            marginLeft: "10px",
+                            padding: "9px 16px",
+                            border: "none",
+                            borderRadius: "8px",
+                            background: "#ef4444",
+                            color: "#ffffff",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            cursor: "pointer"
+                        }}
+                    >
+                        Logout
+                    </button>
 
                 </div>
 
@@ -159,11 +212,14 @@ function PatientDashboard() {
 
             <section className="dashboard-grid">
 
-                {/* Upcoming Appointments */}
+                {/* ================= UPCOMING APPOINTMENTS ================= */}
 
                 <div className="dashboard-card">
 
-                    <div className="card-header">
+                    <div
+                        className="card-header"
+                        style={cardHeaderStyle}
+                    >
 
                         <div>
                             <h2>Upcoming Appointments</h2>
@@ -174,6 +230,7 @@ function PatientDashboard() {
                             onClick={() =>
                                 navigate("/patient/appointments")
                             }
+                            style={viewAllStyle}
                         >
                             View All
                         </button>
@@ -204,11 +261,14 @@ function PatientDashboard() {
                 </div>
 
 
-                {/* Prescriptions */}
+                {/* ================= ACTIVE PRESCRIPTIONS ================= */}
 
                 <div className="dashboard-card">
 
-                    <div className="card-header">
+                    <div
+                        className="card-header"
+                        style={cardHeaderStyle}
+                    >
 
                         <div>
                             <h2>Active Prescriptions</h2>
@@ -219,6 +279,7 @@ function PatientDashboard() {
                             onClick={() =>
                                 navigate("/patient/prescriptions")
                             }
+                            style={viewAllStyle}
                         >
                             View All
                         </button>
@@ -241,11 +302,14 @@ function PatientDashboard() {
                 </div>
 
 
-                {/* Medical Records */}
+                {/* ================= MEDICAL RECORDS ================= */}
 
                 <div className="dashboard-card">
 
-                    <div className="card-header">
+                    <div
+                        className="card-header"
+                        style={cardHeaderStyle}
+                    >
 
                         <div>
                             <h2>Recent Medical Records</h2>
@@ -256,6 +320,7 @@ function PatientDashboard() {
                             onClick={() =>
                                 navigate("/patient/medical-records")
                             }
+                            style={viewAllStyle}
                         >
                             View All
                         </button>
@@ -278,11 +343,14 @@ function PatientDashboard() {
                 </div>
 
 
-                {/* Lab Reports */}
+                {/* ================= LAB REPORTS ================= */}
 
                 <div className="dashboard-card">
 
-                    <div className="card-header">
+                    <div
+                        className="card-header"
+                        style={cardHeaderStyle}
+                    >
 
                         <div>
                             <h2>Recent Lab Reports</h2>
@@ -293,6 +361,7 @@ function PatientDashboard() {
                             onClick={() =>
                                 navigate("/patient/lab-reports")
                             }
+                            style={viewAllStyle}
                         >
                             View All
                         </button>

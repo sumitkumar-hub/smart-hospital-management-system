@@ -16,7 +16,9 @@ public class PatientService {
     @Autowired
     private PatientRepository patientRepository;
 
-    // Add Patient
+    // =========================
+    // ADD PATIENT
+    // =========================
     public PatientResponseDTO addPatient(PatientRequestDTO request) {
 
         if (patientRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -39,14 +41,18 @@ public class PatientService {
         patient.setBloodGroup(request.getBloodGroup());
         patient.setEmergencyContactName(request.getEmergencyContactName());
         patient.setEmergencyContactPhone(request.getEmergencyContactPhone());
+
         patient.setActive(true);
 
-        Patient savedPatient = patientRepository.save(patient);
+        Patient savedPatient =
+                patientRepository.save(patient);
 
         return mapToResponse(savedPatient);
     }
 
-    // Get All Patients
+    // =========================
+    // GET ALL PATIENTS
+    // =========================
     public List<PatientResponseDTO> getAllPatients() {
 
         return patientRepository.findAll()
@@ -55,19 +61,36 @@ public class PatientService {
                 .collect(Collectors.toList());
     }
 
-    // Get Patient By Id
+    // =========================
+    // GET PATIENT BY ID
+    // =========================
     public PatientResponseDTO getPatientById(Long id) {
 
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Patient not found"));
+        Patient patient =
+                patientRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Patient not found"
+                                )
+                        );
 
         return mapToResponse(patient);
     }
-    // Update Patient
-    public PatientResponseDTO updatePatient(Long id, PatientRequestDTO request) {
 
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Patient not found"));
+    // =========================
+    // UPDATE PATIENT
+    // =========================
+    public PatientResponseDTO updatePatient(
+            Long id,
+            PatientRequestDTO request) {
+
+        Patient patient =
+                patientRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Patient not found"
+                                )
+                        );
 
         patient.setFirstName(request.getFirstName());
         patient.setLastName(request.getLastName());
@@ -77,18 +100,81 @@ public class PatientService {
         patient.setEmail(request.getEmail());
         patient.setAddress(request.getAddress());
         patient.setBloodGroup(request.getBloodGroup());
-        patient.setEmergencyContactName(request.getEmergencyContactName());
-        patient.setEmergencyContactPhone(request.getEmergencyContactPhone());
+        patient.setEmergencyContactName(
+                request.getEmergencyContactName()
+        );
+        patient.setEmergencyContactPhone(
+                request.getEmergencyContactPhone()
+        );
 
-        Patient updatedPatient = patientRepository.save(patient);
+        Patient updatedPatient =
+                patientRepository.save(patient);
 
         return mapToResponse(updatedPatient);
     }
 
-    // Common Mapper
-    private PatientResponseDTO mapToResponse(Patient patient) {
+    // =========================
+    // DEACTIVATE PATIENT
+    // =========================
+    public PatientResponseDTO deactivatePatient(Long id) {
 
-        PatientResponseDTO response = new PatientResponseDTO();
+        Patient patient =
+                patientRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Patient not found"
+                                )
+                        );
+
+        if (Boolean.FALSE.equals(patient.getActive())) {
+            throw new RuntimeException(
+                    "Patient is already inactive"
+            );
+        }
+
+        patient.setActive(false);
+
+        Patient updatedPatient =
+                patientRepository.save(patient);
+
+        return mapToResponse(updatedPatient);
+    }
+
+    // =========================
+    // ACTIVATE PATIENT
+    // =========================
+    public PatientResponseDTO activatePatient(Long id) {
+
+        Patient patient =
+                patientRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Patient not found"
+                                )
+                        );
+
+        if (Boolean.TRUE.equals(patient.getActive())) {
+            throw new RuntimeException(
+                    "Patient is already active"
+            );
+        }
+
+        patient.setActive(true);
+
+        Patient updatedPatient =
+                patientRepository.save(patient);
+
+        return mapToResponse(updatedPatient);
+    }
+
+    // =========================
+    // COMMON MAPPER
+    // =========================
+    private PatientResponseDTO mapToResponse(
+            Patient patient) {
+
+        PatientResponseDTO response =
+                new PatientResponseDTO();
 
         response.setId(patient.getId());
         response.setFirstName(patient.getFirstName());
@@ -99,8 +185,12 @@ public class PatientService {
         response.setEmail(patient.getEmail());
         response.setAddress(patient.getAddress());
         response.setBloodGroup(patient.getBloodGroup());
-        response.setEmergencyContactName(patient.getEmergencyContactName());
-        response.setEmergencyContactPhone(patient.getEmergencyContactPhone());
+        response.setEmergencyContactName(
+                patient.getEmergencyContactName()
+        );
+        response.setEmergencyContactPhone(
+                patient.getEmergencyContactPhone()
+        );
         response.setActive(patient.getActive());
 
         return response;
